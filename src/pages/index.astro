@@ -1,4 +1,6 @@
 ---
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { MessageSquareWarningIcon } from "lucide-react";
 import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
@@ -13,7 +15,13 @@ import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
   <body>
     <Header />
     <main>
-      <h1>Hello, World!</h1>
+      <Alert>
+        <MessageSquareWarningIcon className="h-4 w-4" />
+        <AlertTitle>Under Construction!</AlertTitle>
+        <AlertDescription>
+          This page is under construction. Please check back later.
+        </AlertDescription>
+      </Alert>
     </main>
     <Footer />
   </body>
