@@ -1,10 +1,12 @@
+import { dev } from '$app/environment';
 import { calculateReadingTime, createExcerpt, parseMarkdown, type BlogPost } from '$lib/utils/blog';
 import { error, json } from '@sveltejs/kit';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import type { RequestHandler } from './$types';
 
-const BLOG_DIR = 'src/content/blog';
+// Configurable blog directory based on environment
+const BLOG_DIR = dev ? 'src/content/blog' : join(process.cwd(), 'content/blog');
 
 export const GET: RequestHandler = async ({ params }) => {
 	const { slug } = params;

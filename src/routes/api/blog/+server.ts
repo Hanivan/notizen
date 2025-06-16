@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import {
 	calculateReadingTime,
 	createExcerpt,
@@ -14,7 +15,8 @@ import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
 import type { RequestHandler } from './$types';
 
-const BLOG_DIR = 'src/content/blog';
+// Configurable blog directory based on environment
+const BLOG_DIR = dev ? 'src/content/blog' : join(process.cwd(), 'content/blog');
 
 async function loadAllPosts(): Promise<BlogPostMeta[]> {
 	try {

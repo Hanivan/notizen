@@ -1,0 +1,12 @@
+{
+	"functions": {
+		"src/routes/api/**/*.ts": {
+			"includeFiles": "content/**"
+		}
+	},
+	"build": {
+		"env": {
+			"NODE_ENV": "production"
+		}
+	}
+}
