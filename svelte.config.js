@@ -7,7 +7,7 @@ const config = {
 	kit: {
 		adapter: adapter({
 			// Configure Vercel adapter
-			runtime: 'nodejs18.x',
+			runtime: 'nodejs@20.x',
 			// Don't split the app into multiple functions
 			split: false,
 			// Include content files in the build
