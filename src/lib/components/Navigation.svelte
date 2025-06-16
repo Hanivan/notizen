@@ -25,6 +25,9 @@
 			<a href="/projects" class="zen-text hover:text-primary font-medium transition-colors">
 				{m.nav_projects()}
 			</a>
+			<a href="/blog" class="zen-text hover:text-primary font-medium transition-colors">
+				{m.nav_blog()}
+			</a>
 			<a href="/contact" class="zen-text hover:text-primary font-medium transition-colors">
 				{m.nav_contact()}
 			</a>
@@ -77,6 +80,13 @@
 						onclick={toggleMobileMenu}
 					>
 						{m.nav_projects()}
+					</a>
+					<a
+						href="/blog"
+						class="zen-text hover:text-primary font-medium transition-colors"
+						onclick={toggleMobileMenu}
+					>
+						{m.nav_blog()}
 					</a>
 					<a
 						href="/contact"

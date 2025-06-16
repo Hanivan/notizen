@@ -102,6 +102,9 @@
 
 					<div class="flex flex-wrap gap-3">
 						<Button href="/projects" size="lg" class="zen-button">{m.cta_view_work()}</Button>
+						<Button href="/blog" variant="outline" size="lg" class="zen-button"
+							>{m.blog_read_blog()}</Button
+						>
 						<Button href="/contact" variant="outline" size="lg" class="zen-button"
 							>{m.cta_lets_talk()}</Button
 						>
