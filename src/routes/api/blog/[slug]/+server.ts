@@ -1,4 +1,3 @@
-import { dev } from '$app/environment';
 import { calculateReadingTime, createExcerpt, parseMarkdown, type BlogPost } from '$lib/utils/blog';
 import { error, json } from '@sveltejs/kit';
 import { readFile } from 'fs/promises';
@@ -7,11 +6,11 @@ import type { RequestHandler } from './$types';
 
 // Use consistent path resolution
 function getBlogDir() {
-	if (dev) {
-		return 'src/content/blog';
-	}
+	// if (dev) {
+	return 'src/content/blog';
+	// }
 	// In production, content should be copied to the build directory
-	return join(process.cwd(), 'content/blog');
+	// return join(process.cwd(), 'content/blog');
 }
 
 export const GET: RequestHandler = async ({ params }) => {

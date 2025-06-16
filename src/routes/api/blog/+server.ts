@@ -1,4 +1,3 @@
-import { dev } from '$app/environment';
 import {
 	calculateReadingTime,
 	createExcerpt,
@@ -17,11 +16,11 @@ import type { RequestHandler } from './$types';
 
 // Use consistent path resolution
 function getBlogDir() {
-	if (dev) {
-		return 'src/content/blog';
-	}
+	// if (dev) {
+	return 'src/content/blog';
+	// }
 	// In production, content should be copied to the build directory
-	return join(process.cwd(), 'content/blog');
+	// return join(process.cwd(), 'content/blog');
 }
 
 async function loadAllPosts(): Promise<BlogPostMeta[]> {
