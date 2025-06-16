@@ -11,7 +11,9 @@ const config = {
 			// Don't split the app into multiple functions
 			split: false,
 			// Include content files in the build
-			external: []
+			external: ['src/content/**/*'],
+			// Ensure content is included in deployment
+			includeFiles: ['src/content/**/*']
 		}),
 		// Add files to be included in the build
 		files: {
