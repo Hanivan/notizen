@@ -17,7 +17,7 @@ import type { RequestHandler } from './$types';
 // Use consistent path resolution
 function getBlogDir() {
 	// if (dev) {
-	return 'src/content/blog';
+	return join(process.cwd(), 'src/content/blog');
 	// }
 	// In production, content should be copied to the build directory
 	// return join(process.cwd(), 'content/blog');
