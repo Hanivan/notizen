@@ -15,11 +15,18 @@ import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
 import type { RequestHandler } from './$types';
 
-// Configurable blog directory based on environment
-const BLOG_DIR = dev ? 'src/content/blog' : join(process.cwd(), 'content/blog');
+// Use consistent path resolution
+function getBlogDir() {
+	if (dev) {
+		return 'src/content/blog';
+	}
+	// In production, content should be copied to the build directory
+	return join(process.cwd(), 'content/blog');
+}
 
 async function loadAllPosts(): Promise<BlogPostMeta[]> {
 	try {
+		const BLOG_DIR = getBlogDir();
 		const files = await readdir(BLOG_DIR);
 		const markdownFiles = files.filter((file) => file.endsWith('.md'));
 

@@ -5,8 +5,14 @@ import { readFile } from 'fs/promises';
 import { join } from 'path';
 import type { RequestHandler } from './$types';
 
-// Configurable blog directory based on environment
-const BLOG_DIR = dev ? 'src/content/blog' : join(process.cwd(), 'content/blog');
+// Use consistent path resolution
+function getBlogDir() {
+	if (dev) {
+		return 'src/content/blog';
+	}
+	// In production, content should be copied to the build directory
+	return join(process.cwd(), 'content/blog');
+}
 
 export const GET: RequestHandler = async ({ params }) => {
 	const { slug } = params;
@@ -16,6 +22,7 @@ export const GET: RequestHandler = async ({ params }) => {
 	}
 
 	try {
+		const BLOG_DIR = getBlogDir();
 		const filePath = join(BLOG_DIR, `${slug}.md`);
 		const content = await readFile(filePath, 'utf-8');
 		const { content: htmlContent, data } = await parseMarkdown(content);

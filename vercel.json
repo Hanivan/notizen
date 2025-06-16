@@ -1,0 +1,21 @@
+{
+	"framework": "sveltekit",
+	"buildCommand": "npm run build",
+	"installCommand": "npm install",
+	"functions": {
+		"src/routes/api/**/*.ts": {
+			"runtime": "nodejs18.x"
+		}
+	},
+	"headers": [
+		{
+			"source": "/api/(.*)",
+			"headers": [
+				{
+					"key": "Cache-Control",
+					"value": "s-maxage=1, stale-while-revalidate"
+				}
+			]
+		}
+	]
+}
