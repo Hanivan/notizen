@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const sourceDir = join(__dirname, '..', 'src', 'content');
-const targetDir = join(__dirname, '..', 'content');
+const targetDir = join(__dirname, '..', '.vercel', 'output', 'functions', 'content');
 
 try {
 	// Create target directory if it doesn't exist
