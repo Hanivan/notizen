@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync } from 'fs';
+import { cpSync, existsSync, mkdirSync, readdirSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -18,6 +18,8 @@ try {
 	if (existsSync(sourceDir)) {
 		cpSync(sourceDir, targetDir, { recursive: true });
 		console.log('✅ Content files copied successfully');
+		console.log('Dir:', join(process.cwd(), 'src/content/blog'));
+		console.log('Content:', readdirSync(join(process.cwd(), 'src/content/blog')));
 	} else {
 		console.log('⚠️  Source content directory not found');
 	}
