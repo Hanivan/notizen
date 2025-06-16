@@ -2280,6 +2280,14 @@ mkdirp@^3.0.1:
   resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-3.0.1.tgz"
   integrity sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg==
 
+mode-watcher@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/mode-watcher/-/mode-watcher-1.0.8.tgz#0cc3846e6fbba44fd4da01a2551fc7e882510c37"
+  integrity sha512-1YIgYymrae0lhcG9zPS/YWOvcKsUbM4bLGIh+eXTUIput5+dEJifcmUgp8NSehSXGSwITH6jbSjNhGEIhE3k5Q==
+  dependencies:
+    runed "^0.25.0"
+    svelte-toolbelt "^0.7.1"
+
 mri@^1.1.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/mri/-/mri-1.2.0.tgz"
@@ -2588,6 +2596,20 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
+runed@^0.23.2:
+  version "0.23.4"
+  resolved "https://registry.yarnpkg.com/runed/-/runed-0.23.4.tgz#0b68fd24434e65dd8cbd9f7072521d6f5f409eba"
+  integrity sha512-9q8oUiBYeXIDLWNK5DfCWlkL0EW3oGbk845VdKlPeia28l751VpfesaB/+7pI6rnbx1I6rqoZ2fZxptOJLxILA==
+  dependencies:
+    esm-env "^1.0.0"
+
+runed@^0.25.0:
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/runed/-/runed-0.25.0.tgz#dad779435734eb4d2bbab85798e2da36e1bd7af4"
+  integrity sha512-7+ma4AG9FT2sWQEA0Egf6mb7PBT2vHyuHail1ie8ropfSjvZGtEAx8YTmUjv/APCsdRRxEVvArNjALk9zFSOrg==
+  dependencies:
+    esm-env "^1.0.0"
+
 runed@^0.28.0:
   version "0.28.0"
   resolved "https://registry.npmjs.org/runed/-/runed-0.28.0.tgz"
@@ -2798,6 +2820,15 @@ svelte-eslint-parser@^1.2.0:
     postcss "^8.4.49"
     postcss-scss "^4.0.9"
     postcss-selector-parser "^7.0.0"
+
+svelte-toolbelt@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/svelte-toolbelt/-/svelte-toolbelt-0.7.1.tgz#63e9c6629456a1a0dd57812f85426e4631fd754e"
+  integrity sha512-HcBOcR17Vx9bjaOceUvxkY3nGmbBmCBBbuWLLEWO6jtmWH8f/QoWmbyUfQZrpDINH39en1b8mptfPQT9VKQ1xQ==
+  dependencies:
+    clsx "^2.1.1"
+    runed "^0.23.2"
+    style-to-object "^1.0.8"
 
 svelte-toolbelt@^0.9.1:
   version "0.9.1"

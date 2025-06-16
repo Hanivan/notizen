@@ -115,7 +115,7 @@
 	<!-- Hero Section -->
 	<PageHero title={m.blog_title()} description={m.blog_description()}>
 		<!-- Search and Filters -->
-		<div class="mx-auto max-w-4xl space-y-6">
+		<div class="mx-auto max-w-4xl space-y-4 px-4 sm:space-y-6 sm:px-0">
 			<!-- Search Bar -->
 			<div class="relative">
 				<Input
@@ -128,11 +128,11 @@
 			</div>
 
 			<!-- Category Filters -->
-			<div class="flex flex-wrap justify-center gap-3">
+			<div class="flex flex-wrap justify-center gap-2 sm:gap-3">
 				<Button
 					variant={selectedCategory === 'all' ? 'default' : 'outline'}
 					size="sm"
-					class="zen-button"
+					class="zen-button text-xs sm:text-sm"
 					onclick={() => (selectedCategory = 'all')}
 				>
 					{m.blog_all_posts()}
@@ -141,7 +141,7 @@
 					<Button
 						variant={selectedCategory === category.toLowerCase() ? 'default' : 'outline'}
 						size="sm"
-						class="zen-button"
+						class="zen-button text-xs sm:text-sm"
 						onclick={() => (selectedCategory = category.toLowerCase())}
 					>
 						{category}
@@ -151,11 +151,11 @@
 
 			<!-- Tag Filters -->
 			{#if tags.length > 0}
-				<div class="flex flex-wrap justify-center gap-2">
+				<div class="flex flex-wrap justify-center gap-1.5 sm:gap-2">
 					{#each tags.slice(0, 8) as tag}
 						<Badge
 							variant={selectedTag === tag.toLowerCase() ? 'default' : 'outline'}
-							class="hover:bg-accent cursor-pointer transition-colors"
+							class="hover:bg-accent cursor-pointer text-xs transition-colors"
 							onclick={() =>
 								(selectedTag = selectedTag === tag.toLowerCase() ? '' : tag.toLowerCase())}
 						>
@@ -167,18 +167,24 @@
 
 			<!-- Active Filters Display -->
 			{#if selectedCategory !== 'all' || selectedTag || searchQuery}
-				<div class="flex flex-wrap items-center justify-center gap-2 text-sm">
+				<div class="flex flex-wrap items-center justify-center gap-1.5 text-xs sm:gap-2 sm:text-sm">
 					<span class="text-muted-foreground">{m.blog_active_filters()}</span>
 					{#if selectedCategory !== 'all'}
-						<Badge variant="secondary">{m.blog_filter_category()} {selectedCategory}</Badge>
+						<Badge variant="secondary" class="text-xs"
+							>{m.blog_filter_category()} {selectedCategory}</Badge
+						>
 					{/if}
 					{#if selectedTag}
-						<Badge variant="secondary">{m.blog_filter_tag()} {selectedTag}</Badge>
+						<Badge variant="secondary" class="text-xs">{m.blog_filter_tag()} {selectedTag}</Badge>
 					{/if}
 					{#if searchQuery}
-						<Badge variant="secondary">{m.blog_filter_search()} "{searchQuery}"</Badge>
+						<Badge variant="secondary" class="text-xs"
+							>{m.blog_filter_search()} "{searchQuery}"</Badge
+						>
 					{/if}
-					<Button variant="ghost" size="sm" onclick={resetFilters}>{m.blog_clear_all()}</Button>
+					<Button variant="ghost" size="sm" class="text-xs sm:text-sm" onclick={resetFilters}
+						>{m.blog_clear_all()}</Button
+					>
 				</div>
 			{/if}
 		</div>
@@ -230,7 +236,7 @@
 			<Section background="muted">
 				<SectionHeader title={m.blog_featured_posts()} />
 
-				<div class="grid gap-6 lg:grid-cols-2">
+				<div class="grid gap-4 sm:gap-6 md:grid-cols-2">
 					{#each featuredPosts as post}
 						<BlogPostCard {post} featured={true} />
 					{/each}
@@ -246,7 +252,7 @@
 					: m.blog_found_posts({ count: filteredPosts.length })}
 			/>
 
-			<div class="grid gap-6 lg:grid-cols-2">
+			<div class="grid gap-4 sm:gap-6 md:grid-cols-2">
 				{#each filteredPosts as post}
 					<BlogPostCard {post} variant="default" />
 				{/each}

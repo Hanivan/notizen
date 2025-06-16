@@ -40,12 +40,17 @@
 <article class="group block h-full">
 	<a
 		href="/blog/{post.slug}"
-		class="border-border/40 bg-card/50 hover:border-border hover:bg-card flex h-full gap-4 rounded-xl border p-4 backdrop-blur-sm transition-all duration-300 hover:shadow-md hover:shadow-black/5 {featured
-			? 'ring-primary/20 ring-1'
-			: ''}"
+		class="border-border/40 bg-card/50 hover:border-border hover:bg-card flex h-full flex-col gap-4 rounded-xl border p-4 backdrop-blur-sm transition-all duration-300 hover:shadow-md hover:shadow-black/5 {variant ===
+		'compact'
+			? ''
+			: 'sm:flex-row'} {featured ? 'ring-primary/20 ring-1' : ''}"
 	>
 		<!-- Image Section -->
-		<div class="relative h-24 w-32 flex-shrink-0 overflow-hidden rounded-lg">
+		<div
+			class="relative {variant === 'compact'
+				? 'aspect-video w-full'
+				: 'h-32 w-full sm:h-24 sm:w-32'} flex-shrink-0 overflow-hidden rounded-lg"
+		>
 			{#if showImage}
 				<img
 					src={post.image}
@@ -66,7 +71,7 @@
 				>
 					<div class="text-center">
 						<div
-							class="text-2xl opacity-70 transition-transform duration-300 group-hover:scale-110"
+							class="text-3xl opacity-70 transition-transform duration-300 group-hover:scale-110 sm:text-2xl"
 						>
 							{postEmoji}
 						</div>
@@ -105,13 +110,15 @@
 
 			<!-- Title -->
 			<h3
-				class="text-foreground group-hover:text-primary mb-2 line-clamp-2 text-base leading-tight font-semibold tracking-tight transition-colors duration-200"
+				class="text-foreground group-hover:text-primary mb-2 line-clamp-2 text-lg leading-tight font-semibold tracking-tight transition-colors duration-200 sm:text-base"
 			>
 				{post.title}
 			</h3>
 
 			<!-- Description -->
-			<p class="text-muted-foreground mb-4 line-clamp-2 flex-1 text-sm leading-relaxed">
+			<p
+				class="text-muted-foreground mb-4 line-clamp-3 flex-1 text-sm leading-relaxed sm:line-clamp-2"
+			>
 				{post.excerpt}
 			</p>
 
@@ -135,19 +142,19 @@
 
 				<!-- Tags Only -->
 				{#if post.tags.length > 0}
-					<div class="flex items-center gap-2">
-						{#each post.tags.slice(0, 3) as tag}
+					<div class="flex flex-wrap items-center gap-2">
+						{#each post.tags.slice(0, variant === 'compact' ? 2 : 3) as tag}
 							<span
 								class="bg-muted/40 text-muted-foreground inline-flex items-center rounded px-2 py-0.5 text-xs"
 							>
 								{tag}
 							</span>
 						{/each}
-						{#if post.tags.length > 3}
+						{#if post.tags.length > (variant === 'compact' ? 2 : 3)}
 							<span
 								class="bg-muted/40 text-muted-foreground inline-flex items-center rounded px-2 py-0.5 text-xs"
 							>
-								+{post.tags.length - 3}
+								+{post.tags.length - (variant === 'compact' ? 2 : 3)}
 							</span>
 						{/if}
 					</div>
@@ -156,7 +163,12 @@
 		</div>
 
 		<!-- Subtle Read Indicator -->
-		<div class="flex items-center opacity-0 transition-all duration-300 group-hover:opacity-100">
+		<div
+			class="flex items-center opacity-0 transition-all duration-300 group-hover:opacity-100 {variant ===
+			'compact'
+				? 'justify-end pt-2'
+				: 'sm:items-start sm:pt-4'}"
+		>
 			<svg
 				class="text-muted-foreground h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
 				fill="none"

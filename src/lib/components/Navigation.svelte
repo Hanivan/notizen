@@ -4,6 +4,7 @@
 	import { m } from '$lib/paraglide/messages.js';
 	import { setLocale } from '$lib/paraglide/runtime';
 	import { Menu, X } from 'lucide-svelte';
+	import ThemeDropdown from './ThemeDropdown.svelte';
 
 	let mobileMenuOpen = false;
 
@@ -33,8 +34,11 @@
 			</a>
 		</div>
 
-		<!-- Language Switcher & Mobile Menu Button -->
+		<!-- Language Switcher & Theme Toggle & Mobile Menu Button -->
 		<div class="flex items-center gap-2">
+			<!-- Theme Toggle -->
+			<ThemeDropdown />
+
 			<!-- Language Switcher -->
 			<div class="hidden gap-1 sm:flex">
 				<Button size="sm" variant="ghost" onclick={() => setLocale('en')} class="text-xs">EN</Button
@@ -96,17 +100,19 @@
 						{m.nav_contact()}
 					</a>
 
-					<!-- Mobile Language Switcher -->
-					<div class="flex gap-2 border-t pt-2">
-						<Button size="sm" variant="outline" onclick={() => setLocale('en')} class="text-xs"
-							>EN</Button
-						>
-						<Button size="sm" variant="outline" onclick={() => setLocale('jp')} class="text-xs"
-							>JP</Button
-						>
-						<Button size="sm" variant="outline" onclick={() => setLocale('id')} class="text-xs"
-							>ID</Button
-						>
+					<!-- Mobile Theme Toggle & Language Switcher -->
+					<div class="flex flex-col gap-2 border-t pt-2">
+						<div class="flex gap-2">
+							<Button size="sm" variant="outline" onclick={() => setLocale('en')} class="text-xs"
+								>EN</Button
+							>
+							<Button size="sm" variant="outline" onclick={() => setLocale('jp')} class="text-xs"
+								>JP</Button
+							>
+							<Button size="sm" variant="outline" onclick={() => setLocale('id')} class="text-xs"
+								>ID</Button
+							>
+						</div>
 					</div>
 				</div>
 			</div>

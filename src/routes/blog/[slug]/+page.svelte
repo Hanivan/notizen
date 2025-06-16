@@ -60,16 +60,43 @@
 		}
 	}
 
-	function sharePost() {
-		if (navigator.share && post) {
-			navigator.share({
-				title: post.title,
-				text: post.description,
-				url: window.location.href
-			});
-		} else {
-			// Fallback: copy URL to clipboard
-			navigator.clipboard.writeText(window.location.href);
+	let shareButtonText = $state(m.blog_share_post());
+	let isSharing = $state(false);
+
+	async function sharePost() {
+		if (isSharing || !post) return;
+
+		isSharing = true;
+		const originalText = shareButtonText;
+
+		try {
+			// Try native Web Share API first
+			if (navigator.share) {
+				await navigator.share({
+					title: post.title,
+					text: post.description,
+					url: window.location.href
+				});
+				shareButtonText = m.blog_shared();
+			} else {
+				// Fallback: copy URL to clipboard
+				await navigator.clipboard.writeText(window.location.href);
+				shareButtonText = m.blog_link_copied();
+			}
+
+			// Reset button text after 2 seconds
+			setTimeout(() => {
+				shareButtonText = originalText;
+				isSharing = false;
+			}, 2000);
+		} catch (err) {
+			console.error('Share failed:', err);
+			// Show error message or fallback to manual copy
+			shareButtonText = m.blog_share_failed();
+			setTimeout(() => {
+				shareButtonText = originalText;
+				isSharing = false;
+			}, 2000);
 		}
 	}
 
@@ -184,33 +211,35 @@
 		<article>
 			<!-- Post Header -->
 			<Section>
-				<div class="mx-auto max-w-4xl">
+				<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 					<!-- Breadcrumb -->
-					<nav class="text-muted-foreground mb-8 text-sm">
+					<nav class="text-muted-foreground mb-6 text-xs sm:mb-8 sm:text-sm">
 						<a href="/" class="hover:text-foreground transition-colors">{m.nav_home()}</a>
-						<span class="mx-2">/</span>
+						<span class="mx-1 sm:mx-2">/</span>
 						<a href="/blog" class="hover:text-foreground transition-colors">{m.blog_title()}</a>
-						<span class="mx-2">/</span>
-						<span>{post.title}</span>
+						<span class="mx-1 sm:mx-2">/</span>
+						<span class="truncate">{post.title}</span>
 					</nav>
 
 					<!-- Post Meta -->
 					<div class="mb-6">
-						<div class="text-muted-foreground mb-4 flex flex-wrap items-center gap-4 text-sm">
+						<div
+							class="text-muted-foreground mb-4 flex flex-col gap-2 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:gap-4"
+						>
 							<span>{m.blog_by_author({ author: post.author })}</span>
-							<span>•</span>
+							<span class="hidden sm:inline">•</span>
 							<time datetime={post.date}>{formatDate(post.date)}</time>
-							<span>•</span>
+							<span class="hidden sm:inline">•</span>
 							<span>{post.readingTime} {m.blog_min_read()}</span>
 						</div>
 
 						<!-- Tags and Category -->
-						<div class="mb-6 flex flex-wrap gap-2">
-							<Badge variant="outline">{post.category}</Badge>
+						<div class="mb-6 flex flex-wrap gap-1.5 sm:gap-2">
+							<Badge variant="outline" class="text-xs sm:text-sm">{post.category}</Badge>
 							{#each post.tags as tag}
 								<Badge
 									variant="secondary"
-									class="hover:bg-accent cursor-pointer transition-colors"
+									class="hover:bg-accent cursor-pointer text-xs transition-colors sm:text-sm"
 									onclick={() => goto(`/blog?tag=${encodeURIComponent(tag.toLowerCase())}`)}
 								>
 									{tag}
@@ -220,17 +249,19 @@
 					</div>
 
 					<!-- Post Title -->
-					<h1 class="mb-6 text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
+					<h1
+						class="mb-4 text-2xl leading-tight font-bold tracking-tight sm:mb-6 sm:text-3xl md:text-4xl lg:text-5xl"
+					>
 						{post.title}
 					</h1>
 
 					<!-- Post Description -->
-					<p class="text-muted-foreground mb-8 text-lg leading-relaxed">
+					<p class="text-muted-foreground mb-6 text-base leading-relaxed sm:mb-8 sm:text-lg">
 						{post.description}
 					</p>
 
 					<!-- Featured Image or Emoji Fallback -->
-					<div class="mb-12 overflow-hidden rounded-lg">
+					<div class="mb-8 overflow-hidden rounded-lg sm:mb-12">
 						{#if showImage}
 							<img
 								src={post.image}
@@ -254,36 +285,52 @@
 								style="background: linear-gradient(to bottom right, oklch(var(--muted) / 0.3), oklch(var(--muted) / 0.6))"
 							>
 								<div class="text-center">
-									<div class="mb-4 text-8xl">{postEmoji}</div>
-									<div class="text-muted-foreground text-lg font-medium">{post.category}</div>
-									<div class="text-muted-foreground/70 text-sm">{post.title}</div>
+									<div class="mb-2 text-4xl sm:mb-4 sm:text-8xl">{postEmoji}</div>
+									<div class="text-muted-foreground text-sm font-medium sm:text-lg">
+										{post.category}
+									</div>
+									<div class="text-muted-foreground/70 text-xs sm:text-sm">{post.title}</div>
 								</div>
 							</div>
 						{/if}
 					</div>
 
 					<!-- Share Buttons -->
-					<div class="mb-12 flex items-center gap-4 border-b pb-6">
+					<div
+						class="mb-8 flex flex-col gap-3 border-b pb-4 sm:mb-12 sm:flex-row sm:items-center sm:gap-4 sm:pb-6"
+					>
 						<span class="text-sm font-medium">{m.blog_share()}</span>
-						<Button variant="outline" size="sm" onclick={sharePost} class="zen-button">
-							{m.blog_share_post()}
-						</Button>
-						<Button
-							variant="outline"
-							size="sm"
-							href="/blog?category={encodeURIComponent(post.category.toLowerCase())}"
-							class="zen-button"
-						>
-							{m.blog_more_in_category({ category: post.category })}
-						</Button>
+						<div class="flex flex-wrap gap-2">
+							<Button
+								variant="outline"
+								size="sm"
+								onclick={sharePost}
+								disabled={isSharing}
+								class="zen-button text-xs sm:text-sm {isSharing
+									? 'cursor-not-allowed opacity-70'
+									: ''}"
+							>
+								{shareButtonText}
+							</Button>
+							<Button
+								variant="outline"
+								size="sm"
+								href="/blog?category={encodeURIComponent(post.category.toLowerCase())}"
+								class="zen-button text-xs sm:text-sm"
+							>
+								{m.blog_more_in_category({ category: post.category })}
+							</Button>
+						</div>
 					</div>
 				</div>
 			</Section>
 
 			<!-- Post Content -->
 			<Section background="muted">
-				<div class="mx-auto max-w-4xl">
-					<div class="prose prose-lg prose-slate dark:prose-invert max-w-none">
+				<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+					<div
+						class="prose prose-sm prose-slate dark:prose-invert sm:prose-base lg:prose-lg mx-auto max-w-none"
+					>
 						{@html post.content}
 					</div>
 				</div>
@@ -291,25 +338,30 @@
 
 			<!-- Post Footer -->
 			<Section>
-				<div class="mx-auto max-w-4xl">
+				<div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 					<!-- Author Bio -->
-					<div class="mb-12 rounded-lg border p-6">
-						<div class="flex items-start gap-4">
+					<div class="mb-8 rounded-lg border p-4 sm:mb-12 sm:p-6">
+						<div class="flex flex-col gap-4 sm:flex-row sm:items-start">
 							<div
-								class="from-primary/20 to-accent/20 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br"
+								class="from-primary/20 to-accent/20 mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br sm:mx-0 sm:h-16 sm:w-16"
 							>
-								<span class="text-2xl">👨‍💻</span>
+								<span class="text-lg sm:text-2xl">👨‍💻</span>
 							</div>
-							<div>
+							<div class="text-center sm:text-left">
 								<h3 class="mb-2 font-semibold">{post.author}</h3>
 								<p class="text-muted-foreground mb-4 text-sm">
 									{m.blog_author_bio()}
 								</p>
-								<div class="flex gap-2">
-									<Button href="/contact" size="sm" class="zen-button"
+								<div class="flex flex-col gap-2 sm:flex-row">
+									<Button href="/contact" size="sm" class="zen-button text-xs sm:text-sm"
 										>{m.blog_get_in_touch()}</Button
 									>
-									<Button href="/blog" variant="outline" size="sm" class="zen-button">
+									<Button
+										href="/blog"
+										variant="outline"
+										size="sm"
+										class="zen-button text-xs sm:text-sm"
+									>
 										{m.blog_more_posts()}
 									</Button>
 								</div>
@@ -318,12 +370,21 @@
 					</div>
 
 					<!-- Navigation -->
-					<div class="mb-12 flex items-center justify-between">
-						<Button href="/blog" variant="outline" class="zen-button"
+					<div
+						class="mb-8 flex flex-col gap-3 sm:mb-12 sm:flex-row sm:items-center sm:justify-between"
+					>
+						<Button href="/blog" variant="outline" class="zen-button text-xs sm:text-sm"
 							>{m.blog_all_posts_link()}</Button
 						>
-						<Button onclick={sharePost} variant="outline" class="zen-button">
-							{m.blog_share_this_post()}
+						<Button
+							onclick={sharePost}
+							variant="outline"
+							disabled={isSharing}
+							class="zen-button text-xs sm:text-sm {isSharing
+								? 'cursor-not-allowed opacity-70'
+								: ''}"
+						>
+							{shareButtonText}
 						</Button>
 					</div>
 				</div>
@@ -333,12 +394,12 @@
 		<!-- Related Posts -->
 		{#if relatedPosts.length > 0}
 			<Section background="muted">
-				<div class="mx-auto max-w-6xl">
+				<div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
 					<SectionHeader title={m.blog_related_posts()} />
 
-					<div class="grid gap-6 lg:grid-cols-2">
+					<div class="grid gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
 						{#each relatedPosts as relatedPost}
-							<BlogPostCard post={relatedPost} variant="default" />
+							<BlogPostCard post={relatedPost} variant="compact" />
 						{/each}
 					</div>
 				</div>

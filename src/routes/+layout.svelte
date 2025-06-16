@@ -2,11 +2,13 @@
 	import Navigation from '$lib/components/Navigation.svelte';
 	import { config } from '$lib/config.js';
 	import { m } from '$lib/paraglide/messages.js';
+	import { ModeWatcher } from 'mode-watcher';
 	import '../app.css';
 
 	let { children } = $props();
 </script>
 
+<ModeWatcher />
 <Navigation />
 
 <main>

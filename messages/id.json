@@ -130,5 +130,8 @@
 	"blog_all_posts_link": "← Semua Artikel",
 	"blog_share_this_post": "Bagikan Artikel Ini",
 	"blog_related_posts": "Artikel Terkait",
-	"blog_read_blog": "Baca Blog"
+	"blog_read_blog": "Baca Blog",
+	"blog_shared": "Dibagikan!",
+	"blog_link_copied": "Link Disalin!",
+	"blog_share_failed": "Gagal Berbagi"
 }

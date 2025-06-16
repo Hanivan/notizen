@@ -7,3 +7,7 @@ export { default as SocialLinks } from './SocialLinks.svelte';
 
 // Other components
 export { default as Navigation } from './Navigation.svelte';
+
+// Theme components
+export { default as ThemeDropdown } from './ThemeDropdown.svelte';
+export { default as ThemeToggle } from './ThemeToggle.svelte';

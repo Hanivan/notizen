@@ -130,5 +130,8 @@
 	"blog_all_posts_link": "← すべての記事",
 	"blog_share_this_post": "この記事を共有",
 	"blog_related_posts": "関連記事",
-	"blog_read_blog": "ブログを読む"
+	"blog_read_blog": "ブログを読む",
+	"blog_shared": "共有しました！",
+	"blog_link_copied": "リンクをコピーしました！",
+	"blog_share_failed": "共有に失敗しました"
 }
