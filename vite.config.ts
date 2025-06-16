@@ -5,6 +5,11 @@ import { svelteTesting } from '@testing-library/svelte/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+	server: {
+		fs: {
+			allow: ['./']
+		}
+	},
 	plugins: [
 		tailwindcss(),
 		sveltekit(),
