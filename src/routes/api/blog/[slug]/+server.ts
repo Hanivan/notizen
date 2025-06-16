@@ -1,21 +1,13 @@
 import { calculateReadingTime, createExcerpt, parseMarkdown, type BlogPost } from '$lib/utils/blog';
 import { error, json } from '@sveltejs/kit';
-import { readdirSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import type { RequestHandler } from './$types';
 
-// Use consistent path resolution
+// Configurable blog directory based on environment
 function getBlogDir() {
-	// if (dev) {
-	const fullPath = join(process.cwd(), 'src/content/blog');
-	console.log('Full path:', fullPath);
-	console.log('Files:', readdirSync(fullPath));
-
-	return fullPath;
-	// }
-	// In production, content should be copied to the build directory
-	// return join(process.cwd(), 'content/blog');
+	console.log('Current Dir:', process.cwd());
+	return join(process.cwd(), 'static/content/blog');
 }
 
 export const GET: RequestHandler = async ({ params }) => {
