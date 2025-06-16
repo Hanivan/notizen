@@ -20,7 +20,7 @@ function getBlogDir() {
 	// if (dev) {
 	const fullPath = join(process.cwd(), 'src/content/blog');
 	console.log('Full path:', fullPath);
-	console.log('Files:', readdirSync(fullPath));
+	console.log('Files:', readdirSync('.'));
 
 	return fullPath;
 	// }

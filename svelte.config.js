@@ -27,7 +27,8 @@ const config = {
 			routes: 'src/routes',
 			serviceWorker: 'src/service-worker',
 			appTemplate: 'src/app.html',
-			errorTemplate: 'src/error.html'
+			errorTemplate: 'src/error.html',
+			content: 'src/content'
 		}
 	},
 	extensions: ['.svelte', '.svx']
