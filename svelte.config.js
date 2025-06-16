@@ -7,7 +7,8 @@ const config = {
 	kit: {
 		adapter: adapter({
 			// Configure Vercel adapter for optimal deployment
-			split: false
+			split: false,
+			external: ['static/content/**/*']
 		})
 	},
 	extensions: ['.svelte', '.svx']

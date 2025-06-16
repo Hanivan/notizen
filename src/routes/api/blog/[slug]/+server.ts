@@ -1,5 +1,6 @@
 import { calculateReadingTime, createExcerpt, parseMarkdown, type BlogPost } from '$lib/utils/blog';
 import { error, json } from '@sveltejs/kit';
+import { readdirSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import type { RequestHandler } from './$types';
@@ -7,6 +8,7 @@ import type { RequestHandler } from './$types';
 // Configurable blog directory based on environment
 function getBlogDir() {
 	console.log('Current Dir:', process.cwd());
+	console.log('Current Files:', readdirSync(join(process.cwd())));
 	return join(process.cwd(), 'static/content/blog');
 }
 
