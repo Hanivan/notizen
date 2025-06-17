@@ -1,13 +1,12 @@
 import { calculateReadingTime, createExcerpt, parseMarkdown, type BlogPost } from '$lib/utils/blog';
 import { error, json } from '@sveltejs/kit';
-import { readFile } from 'fs/promises';
-import { join } from 'path';
 import type { RequestHandler } from './$types';
 
-// Configurable blog directory based on environment
-function getBlogDir() {
-	return join(process.cwd(), '/static/content/blog');
-}
+// Import all markdown files at build time
+const allMarkdownFiles = import.meta.glob('/static/content/blog/*.md', {
+	as: 'raw',
+	eager: true
+});
 
 export const GET: RequestHandler = async ({ params }) => {
 	const { slug } = params;
@@ -17,9 +16,14 @@ export const GET: RequestHandler = async ({ params }) => {
 	}
 
 	try {
-		const BLOG_DIR = getBlogDir();
-		const filePath = join(BLOG_DIR, `${slug}.md`);
-		const content = await readFile(filePath, 'utf-8');
+		// Find the matching file by slug
+		const filePath = `/static/content/blog/${slug}.md`;
+		const content = allMarkdownFiles[filePath];
+
+		if (!content) {
+			throw error(404, `Blog post '${slug}' not found`);
+		}
+
 		const { content: htmlContent, data } = await parseMarkdown(content);
 
 		const excerpt = createExcerpt(data.description || htmlContent);
@@ -43,6 +47,11 @@ export const GET: RequestHandler = async ({ params }) => {
 		return json(post);
 	} catch (err) {
 		console.error(`Error loading blog post ${slug}:`, err);
+		// If it's already a SvelteKit error, re-throw it
+		if (err && typeof err === 'object' && 'status' in err) {
+			throw err;
+		}
+		// Otherwise, throw a 404
 		throw error(404, `Blog post '${slug}' not found`);
 	}
 };

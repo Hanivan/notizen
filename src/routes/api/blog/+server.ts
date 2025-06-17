@@ -10,30 +10,24 @@ import {
 	type BlogPostMeta
 } from '$lib/utils/blog';
 import { json } from '@sveltejs/kit';
-import { readdir, readFile } from 'fs/promises';
-import { join } from 'path';
 import type { RequestHandler } from './$types';
 
-// Configurable blog directory based on environment
-function getBlogDir() {
-	return join(process.cwd(), '/static/content/blog');
-}
+// Import all markdown files at build time
+const allMarkdownFiles = import.meta.glob('/static/content/blog/*.md', {
+	as: 'raw',
+	eager: true
+});
 
 async function loadAllPosts(): Promise<BlogPostMeta[]> {
 	try {
-		const BLOG_DIR = getBlogDir();
-		const files = await readdir(BLOG_DIR);
-		const markdownFiles = files.filter((file) => file.endsWith('.md'));
-
 		const posts = await Promise.all(
-			markdownFiles.map(async (file) => {
-				const filePath = join(BLOG_DIR, file);
-				const content = await readFile(filePath, 'utf-8');
-				const { content: htmlContent, data } = await parseMarkdown(content);
+			Object.entries(allMarkdownFiles).map(async ([path, content]) => {
+				const { content: htmlContent, data } = await parseMarkdown(content as string);
 
-				const slug = file.replace('.md', '');
+				// Extract slug from file path
+				const slug = path.split('/').pop()?.replace('.md', '') || '';
 				const excerpt = createExcerpt(data.description || htmlContent);
-				const readingTime = calculateReadingTime(content);
+				const readingTime = calculateReadingTime(content as string);
 
 				return {
 					slug,
