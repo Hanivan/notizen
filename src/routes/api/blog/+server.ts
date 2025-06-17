@@ -14,7 +14,8 @@ import type { RequestHandler } from './$types';
 
 // Import all markdown files at build time
 const allMarkdownFiles = import.meta.glob('/static/content/blog/*.md', {
-	as: 'raw',
+	query: '?raw',
+	import: 'default',
 	eager: true
 });
 

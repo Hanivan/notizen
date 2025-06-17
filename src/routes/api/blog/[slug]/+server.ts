@@ -4,7 +4,8 @@ import type { RequestHandler } from './$types';
 
 // Import all markdown files at build time
 const allMarkdownFiles = import.meta.glob('/static/content/blog/*.md', {
-	as: 'raw',
+	query: '?raw',
+	import: 'default',
 	eager: true
 });
 
@@ -18,7 +19,7 @@ export const GET: RequestHandler = async ({ params }) => {
 	try {
 		// Find the matching file by slug
 		const filePath = `/static/content/blog/${slug}.md`;
-		const content = allMarkdownFiles[filePath];
+		const content = allMarkdownFiles[filePath] as string;
 
 		if (!content) {
 			throw error(404, `Blog post '${slug}' not found`);
