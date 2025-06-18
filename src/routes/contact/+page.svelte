@@ -39,7 +39,7 @@
 		};
 
 		isSubmitting = false;
-		alert('Message sent successfully!'); // In real app, use proper notification
+		alert(m.message_sent_success()); // In real app, use proper notification
 	}
 
 	// FAQ data
@@ -140,7 +140,7 @@
 						<div class="space-y-2">
 							<p class="text-sm font-medium">Status</p>
 							<Badge variant="secondary" class="bg-green-100 text-green-800">
-								{config.business.availability ? m.contact_availability() : 'Currently Unavailable'}
+								{config.business.availability ? m.contact_availability() : m.currently_unavailable()}
 							</Badge>
 						</div>
 					</CardContent>
@@ -157,7 +157,7 @@
 							<div class="text-center">
 								<div class="space-y-3">
 									<div class="text-3xl opacity-50">🔗</div>
-									<p class="text-muted-foreground text-sm">Social links will be available soon!</p>
+									<p class="text-muted-foreground text-sm">{m.social_links_available_soon()}</p>
 								</div>
 							</div>
 						{/if}
@@ -190,8 +190,8 @@
 			{:else}
 				<EmptyState
 					icon="❓"
-					title="FAQ Coming Soon"
-					description="I'm preparing answers to commonly asked questions. Check back soon!"
+					title={m.faq_coming_soon_title()}
+					description={m.faq_coming_soon_description()}
 				/>
 			{/if}
 		</Section>

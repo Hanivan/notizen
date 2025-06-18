@@ -133,5 +133,19 @@
 	"blog_read_blog": "Baca Blog",
 	"blog_shared": "Dibagikan!",
 	"blog_link_copied": "Link Disalin!",
-	"blog_share_failed": "Gagal Berbagi"
+	"blog_share_failed": "Gagal Berbagi",
+	"projects_coming_soon_title": "Proyek Segera Hadir",
+	"projects_coming_soon_description": "Saya sedang mengerjakan beberapa proyek menarik yang menunjukkan keterampilan dan kreativitas saya. Kembali lagi nanti untuk melihat apa yang telah saya bangun!",
+	"get_in_touch": "Hubungi Saya",
+	"back_to_home": "Kembali ke Beranda",
+	"faq_coming_soon_title": "FAQ Segera Hadir",
+	"faq_coming_soon_description": "Saya sedang mempersiapkan jawaban untuk pertanyaan yang sering diajukan. Kembali lagi nanti!",
+	"skills_coming_soon_title": "Skills Segera Hadir",
+	"skills_coming_soon_description": "Saya sedang memperbarui bagian keterampilan saya. Kembali lagi nanti!",
+	"currently_unavailable": "Saat Ini Tidak Tersedia",
+	"social_links_available_soon": "Link sosial akan tersedia segera!",
+	"no_projects_found_title": "Proyek Tidak Ditemukan",
+	"no_projects_found_description": "Tidak ada proyek yang cocok dengan filter saat ini. Coba pilih kategori yang berbeda.",
+	"show_all_projects": "Tampilkan Semua Proyek",
+	"message_sent_success": "Pesan berhasil dikirim!"
 }

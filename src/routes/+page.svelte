@@ -217,8 +217,8 @@
 				{:else if config.projects.showEmptyState}
 					<EmptyState
 						icon="🚧"
-						title="Projects Coming Soon"
-						description="I'm currently working on some exciting projects. Stay tuned!"
+						title={m.projects_coming_soon_title()}
+						description={m.projects_coming_soon_description()}
 					/>
 				{/if}
 			</Section>
@@ -293,11 +293,14 @@
 								</div>
 								<Separator />
 								<div class="flex flex-col gap-3 sm:flex-row">
-									<Button href="/contact" size="sm" class="zen-button flex-1"
+									<Button href="/contact" size="sm" class="zen-button w-full sm:flex-1"
 										>{m.contact_button_message()}</Button
 									>
-									<Button href="/contact" variant="outline" size="sm" class="zen-button flex-1"
-										>{m.contact_button_talk()}</Button
+									<Button
+										href="/contact"
+										variant="outline"
+										size="sm"
+										class="zen-button w-full sm:flex-1">{m.contact_button_talk()}</Button
 									>
 								</div>
 							</CardContent>

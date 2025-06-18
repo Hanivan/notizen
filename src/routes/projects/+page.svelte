@@ -226,8 +226,8 @@
 			<Section background="muted">
 				<EmptyState
 					icon="🔍"
-					title="No Projects Found"
-					description="No projects match the current filter. Try selecting a different category."
+					title={m.no_projects_found_title()}
+					description={m.no_projects_found_description()}
 				>
 					{#snippet actions()}
 						<Button
@@ -236,7 +236,7 @@
 							class="zen-button"
 							onclick={() => (selectedFilter = 'all')}
 						>
-							Show All Projects
+							{m.show_all_projects()}
 						</Button>
 					{/snippet}
 				</EmptyState>
@@ -247,14 +247,14 @@
 		<Section background="muted">
 			<EmptyState
 				icon="🚧"
-				title="Projects Coming Soon"
-				description="I'm currently working on some exciting projects that showcase my skills and creativity. Check back soon to see what I've been building!"
+				title={m.projects_coming_soon_title()}
+				description={m.projects_coming_soon_description()}
 				maxWidth="lg"
 			>
 				{#snippet actions()}
-					<Button href="/contact" size="lg" class="zen-button min-w-48">Get In Touch</Button>
+					<Button href="/contact" size="lg" class="zen-button min-w-48">{m.get_in_touch()}</Button>
 					<Button href="/" variant="outline" size="lg" class="zen-button min-w-48"
-						>Back to Home</Button
+						>{m.back_to_home()}</Button
 					>
 				{/snippet}
 			</EmptyState>

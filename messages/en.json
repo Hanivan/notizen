@@ -133,5 +133,19 @@
 	"blog_read_blog": "Read Blog",
 	"blog_shared": "Shared!",
 	"blog_link_copied": "Link Copied!",
-	"blog_share_failed": "Share Failed"
+	"blog_share_failed": "Share Failed",
+	"projects_coming_soon_title": "Projects Coming Soon",
+	"projects_coming_soon_description": "I'm currently working on some exciting projects that showcase my skills and creativity. Check back soon to see what I've been building!",
+	"get_in_touch": "Get In Touch",
+	"back_to_home": "Back to Home",
+	"faq_coming_soon_title": "FAQ Coming Soon",
+	"faq_coming_soon_description": "I'm preparing answers to commonly asked questions. Check back soon!",
+	"skills_coming_soon_title": "Skills Coming Soon",
+	"skills_coming_soon_description": "I'm currently updating my skills section. Check back soon!",
+	"currently_unavailable": "Currently Unavailable",
+	"social_links_available_soon": "Social links will be available soon!",
+	"no_projects_found_title": "No Projects Found",
+	"no_projects_found_description": "No projects match the current filter. Try selecting a different category.",
+	"show_all_projects": "Show All Projects",
+	"message_sent_success": "Message sent successfully!"
 }

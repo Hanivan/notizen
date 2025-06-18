@@ -133,5 +133,19 @@
 	"blog_read_blog": "ブログを読む",
 	"blog_shared": "共有しました！",
 	"blog_link_copied": "リンクをコピーしました！",
-	"blog_share_failed": "共有に失敗しました"
+	"blog_share_failed": "共有に失敗しました",
+	"projects_coming_soon_title": "プロジェクト準備中",
+	"projects_coming_soon_description": "現在、私のスキルと創造性を示すエキサイティングなプロジェクトに取り組んでいます。私が構築しているものを見るために、近いうちに確認してください！",
+	"get_in_touch": "お問い合わせ",
+	"back_to_home": "ホームに戻る",
+	"faq_coming_soon_title": "FAQ準備中",
+	"faq_coming_soon_description": "よくある質問への回答を準備中です。近いうちに確認してください！",
+	"skills_coming_soon_title": "スキル準備中",
+	"skills_coming_soon_description": "現在、スキルセクションを更新中です。近いうちに確認してください！",
+	"currently_unavailable": "現在利用できません",
+	"social_links_available_soon": "ソーシャルリンクは近日中に利用可能になります！",
+	"no_projects_found_title": "プロジェクトが見つかりません",
+	"no_projects_found_description": "現在のフィルターに一致するプロジェクトがありません。別のカテゴリーを選択してください。",
+	"show_all_projects": "すべてのプロジェクトを表示",
+	"message_sent_success": "メッセージが正常に送信されました！"
 }
