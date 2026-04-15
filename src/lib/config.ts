@@ -5,6 +5,7 @@ export const config = {
 	// Personal Information
 	personal: {
 		name: 'Hanivan Rizky Sobari',
+		shortname: 'Hanivan Rizky S',
 		initials: 'HRS',
 		title: 'Development Blog',
 		email: 'hello@hanivan.my.id',
@@ -44,7 +45,7 @@ export const config = {
 			label: 'GitHub'
 		},
 		twitter: {
-			url: 'https://twitter.com/hanivanrizky_',
+			url: 'https://x.com/hanivanrizky_',
 			icon: 'X',
 			label: 'X (Twitter)'
 		},
@@ -79,7 +80,7 @@ export const config = {
 
 	// Business Information
 	business: {
-		copyright: `© ${new Date().getFullYear()} Notizen by Hanivan Rizky Sobari. All rights reserved.`,
+		copyright: `© ${new Date().getFullYear()} Notizen by Hanivan Rizky S. All rights reserved.`,
 		timezone: 'WIB (GMT+7)'
 	}
 };

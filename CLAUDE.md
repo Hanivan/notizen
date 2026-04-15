@@ -216,15 +216,28 @@ Enhanced image optimization.
 
 2,000+ icons with 6 weights.
 
+**⚠️ IMPORTANT: Always use `*Icon` suffix for imports**
+
+The old icon names (without `Icon` suffix) are deprecated. Always use the newer `*Icon` versions.
+
 ```svelte
 <script>
+  // ❌ BAD: Old imports (deprecated)
   import { House, User, Settings, MagnifyingGlass } from 'phosphor-svelte';
+
+  // ✅ GOOD: New imports with Icon suffix
+  import { HouseIcon, UserIcon, SettingsIcon, MagnifyingGlassIcon } from 'phosphor-svelte';
 </script>
 
-<House size={32} weight="fill" />
-<User size={24} weight="regular" />
-<Settings size={20} weight="thin" />
+<HouseIcon size={32} weight="fill" />
+<UserIcon size={24} weight="regular" />
+<SettingsIcon size={20} weight="thin" />
 ```
+
+**Why This Matters:**
+- Old names trigger deprecation warnings
+- New names are the future-proof standard
+- Same API, just with `Icon` suffix
 
 **Weights**: thin, light, regular, bold, fill, duotone
 
@@ -619,6 +632,167 @@ Edit({
 - ✅ Operations where Edit tool isn't available
 - ❌ Never for .svelte, .ts, .js, .json files
 
+**6. Maximize Built-in Svelte Animation Modules**
+
+Svelte 5 includes powerful built-in animation and transition modules. Use these instead of external animation libraries.
+
+```svelte
+<script>
+  import { fade, blur, fly, slide, scale } from 'svelte/transition';
+  import { flip } from 'svelte/animate';
+  import { tweened, spring } from 'svelte/motion';
+  import { quintOut } from 'svelte/easing';
+
+  // Animated value with spring physics
+  let progress = $state(0);
+  let tweenedProgress = $state(tweened(0, {
+    duration: 300,
+    easing: quintOut
+  }));
+
+  // Spring-animated value (smooth, physics-based)
+  let position = $state(spring({ x: 0, y: 0 }, {
+    stiffness: 0.1,
+    damping: 0.2
+  }));
+
+  let visible = $state(false);
+  let items = $state([
+    { id: 1, text: 'Item 1' },
+    { id: 2, text: 'Item 2' },
+    { id: 3, text: 'Item 3' }
+  ]);
+</script>
+
+<!-- Built-in transitions -->
+<button onclick={() => visible = !visible}>
+  Toggle
+</button>
+
+{#if visible}
+  <div transition:fade={{ duration: 300 }}>
+    Fade in/out
+  </div>
+
+  <div transition:blur={{ amount: 10, duration: 300 }}>
+    Blur in/out
+  </div>
+
+  <div transition:fly={{ y: 50, duration: 300, easing: quintOut }}>
+    Fly from bottom
+  </div>
+
+  <div transition:slide={{ duration: 300 }}>
+    Slide in
+  </div>
+
+  <div transition:scale={{ duration: 300, start: 0.5, easing: quintOut }}>
+    Scale in
+  </div>
+{/if}
+
+<!-- Animate reordered lists with flip -->
+{#each items as item (item.id)}
+  <div animate:flip={{ duration: 300 }}>
+    {item.text}
+  </div>
+{/each}
+
+<!-- Spring-animated progress bar -->
+<progress value={$tweenedProgress} max="100" />
+
+<!-- Smooth value interpolation -->
+<script>
+  async function updateProgress() {
+    for (let i = 0; i <= 100; i++) {
+      progress = i;
+      tweenedProgress.set(i); // Smoothly interpolates
+      await sleep(10);
+    }
+  }
+</script>
+```
+
+**Built-in Animation Modules:**
+
+- **`svelte/transition`** - Entrance/exit effects
+  - `fade` - Opacity transition
+  - `blur` - Blur + opacity transition
+  - `fly` - Position + opacity transition
+  - `slide` - Slide in from edge
+  - `scale` - Scale + opacity transition
+  - All support `duration`, `delay`, `easing` parameters
+
+- **`svelte/animate`** - List reordering
+  - `flip` - Animate elements to new positions in keyed each blocks
+  - Perfect for sortable lists, drag-and-drop, reordering
+
+- **`svelte/motion`** - Smooth value transitions
+  - `tweened(value, options)` - Tween between values over time
+  - `spring(value, options)` - Physics-based spring animations
+  - Use with `$state` for reactive animated values
+
+- **`svelte/easing`** - Easing functions
+  - `linear`, `quad`, `cubic`, `quart`, `quint`, `sine`, `expo`, `circ`, `back`
+  - Each has `In`, `Out`, `InOut` variants (e.g., `quintOut`)
+
+**Why Use Built-in Modules:**
+- ✅ **No extra dependencies** - Smaller bundle size
+- ✅ **Svelte-optimized** - Designed for Svelte's reactivity
+- ✅ **Type-safe** - Full TypeScript support
+- ✅ **Performant** - Efficient DOM manipulation
+- ✅ **Flexible** - Combine with CSS transitions for custom effects
+
+**When to Use External Libraries:**
+- Complex 3D animations (three.js)
+- SVG animations (gsap)
+- Canvas/WebGL animations
+- Specific animation formats (Lottie, Rive)
+
+**Advanced Example: Combining Modules**
+```svelte
+<script>
+  import { fly, scale } from 'svelte/transition';
+  import { flip } from 'svelte/animate';
+  import { spring } from 'svelte/motion';
+
+  let cards = $state([
+    { id: 1, title: 'Card 1', color: 'red' },
+    { id: 2, title: 'Card 2', color: 'blue' },
+    { id: 3, title: 'Card 3', color: 'green' }
+  ]);
+
+  let offset = $state(spring({ x: 0, y: 0 }, {
+    stiffness: 0.15,
+    damping: 0.1
+  }));
+
+  function moveUp(index) {
+    if (index > 0) {
+      const temp = cards[index];
+      cards[index] = cards[index - 1];
+      cards[index - 1] = temp;
+    }
+  }
+</script>
+
+<div style="transform: translate({$offset.x}px, {$offset.y}px)">
+  {#each cards as card (card.id)}
+    <div
+      class="card"
+      animate:flip={{ duration: 400 }}
+      transition:fly|scale={{ duration: 300 }}
+      style="background: {card.color}"
+      role="button"
+      tabindex="0"
+      onclick={() => moveUp(cards.indexOf(card))}
+    >
+      {card.title}
+    </div>
+  {/each}
+</div>
+```
+
 **Advanced BaseLayout with Slots:**
 ```svelte
 <!-- src/routes/+layout.svelte -->
@@ -663,6 +837,61 @@ Edit({
 <h1>About</h1>
 <p>About content...</p>
 ```
+
+**7. Always Use `*Icon` Suffix for phosphor-svelte Imports**
+
+The phosphor-svelte library has deprecated old icon names. Always use the new `*Icon` prefixed imports.
+
+```typescript
+// ❌ BAD: Old imports (deprecated)
+import { House, Newspaper, List, X } from 'phosphor-svelte';
+
+// ✅ GOOD: New imports with Icon suffix
+import { HouseIcon, NewspaperIcon, ListIcon, XIcon } from 'phosphor-svelte';
+```
+
+**Why This Matters:**
+- Old names trigger deprecation warnings
+- New names are the future-proof standard
+- Same API, just with `Icon` suffix
+- Prevents breaking changes in future versions
+
+**Complete Example:**
+```svelte
+<script lang="ts">
+  import { HouseIcon, NewspaperIcon, ListIcon, XIcon, SunIcon, MoonIcon } from 'phosphor-svelte';
+  import { setMode } from 'mode-watcher';
+</script>
+
+<!-- Usage is identical -->
+<HouseIcon size={24} weight="thin" />
+<NewspaperIcon size={20} weight="fill" />
+<XIcon size={18} weight="regular" />
+
+<!-- Theme toggle example -->
+<button onclick={() => setMode('light')}>
+  <SunIcon size={20} weight="fill" />
+</button>
+<button onclick={() => setMode('dark')}>
+  <MoonIcon size={20} weight="fill" />
+</button>
+```
+
+**Migration Guide:**
+- `House` → `HouseIcon`
+- `Newspaper` → `NewspaperIcon`
+- `List` → `ListIcon`
+- `X` → `XIcon`
+- `Sun` → `SunIcon`
+- `Moon` → `MoonIcon`
+- `Monitor` → `MonitorIcon`
+- `GithubLogo` → `GithubLogoIcon`
+- `Envelope` → `EnvelopeIcon`
+- `User` → `UserIcon`
+- `Settings` → `SettingsIcon`
+- `MagnifyingGlass` → `MagnifyingGlassIcon`
+
+All icons follow the same pattern: `{IconName}Icon`
 
 ### **Component Structure**
 ```svelte
