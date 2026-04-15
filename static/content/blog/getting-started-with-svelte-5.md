@@ -4,7 +4,7 @@ description: "A comprehensive guide to understanding and using Svelte 5's new ru
 date: "2025-04-10"
 category: "Svelte"
 tags: ["svelte", "javascript", "frontend", "tutorial"]
-author: "Your Name"
+author: "Hanivan Rizky Sobari"
 featured: true
 image: ""
 ---

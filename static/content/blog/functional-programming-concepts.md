@@ -4,7 +4,7 @@ description: "Learn the core concepts of functional programming and how to apply
 date: "2025-04-08"
 category: "JavaScript"
 tags: ["javascript", "functional", "programming", "concepts"]
-author: "Your Name"
+author: "Hanivan Rizky Sobari"
 featured: false
 image: ""
 ---

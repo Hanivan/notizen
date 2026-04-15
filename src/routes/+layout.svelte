@@ -2,6 +2,7 @@
 	import type { Pathname } from '$app/types';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
+	import { afterNavigate } from '$app/navigation';
 	import { locales, localizeHref } from '$lib/paraglide/runtime';
 	import { ModeWatcher } from 'mode-watcher';
 	import { MetaTags, JsonLd } from 'svelte-meta-tags';
@@ -10,12 +11,20 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
+	import { browser } from '$app/environment';
 
 	interface Props {
 		children: any;
 	}
 
 	let { children }: Props = $props();
+
+	// Scroll to top after navigation (proper SvelteKit way)
+	afterNavigate(() => {
+		if (browser) {
+			window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+		}
+	});
 </script>
 
 <svelte:head>

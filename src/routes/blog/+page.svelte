@@ -11,6 +11,9 @@
 		type BlogPostMeta
 	} from '$lib/utils/blog';
 	import { MagnifyingGlass, Tag, Folder, X } from 'phosphor-svelte';
+	import { fade, fly, blur } from 'svelte/transition';
+	import { flip } from 'svelte/animate';
+	import { quintOut } from 'svelte/easing';
 
 	// Svelte 5 state
 	let posts = $state<BlogPostMeta[]>([]);
@@ -98,7 +101,7 @@
 			</div>
 
 			<!-- Main heading -->
-			<h1 class="mb-6 text-5xl font-semibold tracking-tight sm:text-6xl md:text-7xl" style="font-family: 'Cormorant Garamond', serif;">
+			<h1 class="mb-6 text-5xl font-semibold tracking-tight sm:text-6xl md:text-7xl">
 				Writing
 			</h1>
 
@@ -241,7 +244,7 @@
 				<div class="w-20 h-20 rounded-full bg-muted mx-auto mb-6 flex items-center justify-center">
 					<MagnifyingGlass size={40} class="text-muted-foreground" />
 				</div>
-				<h1 class="mb-4 text-3xl font-semibold" style="font-family: 'Cormorant Garamond', serif;">
+				<h1 class="mb-4 text-3xl font-semibold">
 					No posts found
 				</h1>
 				<p class="text-muted-foreground mb-8 text-lg leading-relaxed">
@@ -267,19 +270,23 @@
 	{#if featuredPosts.length > 0 && selectedCategory === 'all' && !selectedTag && !searchQuery}
 		<section class="border-b border-border/40 bg-muted/20 py-16">
 			<div class="container mx-auto px-4">
-				<div class="mb-10">
+				<div class="mb-10" in:fly={{ y: -20, opacity: 0, duration: 600, easing: quintOut }}>
 					<div class="flex items-center gap-3 mb-2">
 						<div class="w-8 h-0.5 bg-primary"></div>
 						<span class="text-sm font-medium tracking-widest uppercase text-muted-foreground">Featured</span>
 					</div>
-					<h2 class="text-3xl font-semibold" style="font-family: 'Cormorant Garamond', serif;">
+					<h2 class="text-3xl font-semibold">
 						Editor's Picks
 					</h2>
 				</div>
 
 				<div class="grid-japanese max-w-7xl mx-auto">
-					{#each featuredPosts as post}
-						<article class="card-japanese">
+					{#each featuredPosts as post, index (post.slug)}
+						<article
+							class="card-japanese"
+							in:fly={{ y: 30, opacity: 0, delay: index * 100, duration: 600, easing: quintOut }}
+							animate:flip={{ duration: 400 }}
+						>
 							<a href={`/blog/${post.slug}`} class="block group">
 								<!-- Post meta -->
 								<div class="flex items-center gap-4 text-sm text-muted-foreground mb-3">
@@ -294,7 +301,7 @@
 								</div>
 
 								<!-- Post title -->
-								<h3 class="text-2xl font-semibold mb-3 group-hover:text-primary transition-colors leading-tight" style="font-family: 'Cormorant Garamond', serif;">
+								<h3 class="text-2xl font-semibold mb-3 group-hover:text-primary transition-colors leading-tight">
 									{post.title}
 								</h3>
 
@@ -320,14 +327,14 @@
 	<!-- All Posts -->
 	<section class="py-16">
 		<div class="container mx-auto px-4">
-			<div class="mb-10">
+			<div class="mb-10" in:fly={{ y: -20, opacity: 0, duration: 600, easing: quintOut }}>
 				<div class="flex items-center justify-between">
 					<div>
 						<div class="flex items-center gap-3 mb-2">
 							<div class="w-8 h-0.5 bg-primary"></div>
 							<span class="text-sm font-medium tracking-widest uppercase text-muted-foreground">Archive</span>
 						</div>
-						<h2 class="text-3xl font-semibold" style="font-family: 'Cormorant Garamond', serif;">
+						<h2 class="text-3xl font-semibold">
 							{filteredPosts.length === posts.length ? 'All Articles' : `${filteredPosts.length} Found`}
 						</h2>
 					</div>
@@ -335,8 +342,12 @@
 			</div>
 
 			<div class="grid-japanese max-w-7xl mx-auto">
-				{#each filteredPosts as post}
-					<article class="card-japanese">
+				{#each filteredPosts as post, index (post.slug)}
+					<article
+						class="card-japanese"
+						in:fly={{ y: 30, opacity: 0, delay: index * 50, duration: 500, easing: quintOut }}
+						animate:flip={{ duration: 400 }}
+					>
 						<a href={`/blog/${post.slug}`} class="block group">
 							<!-- Post meta -->
 							<div class="flex items-center gap-4 text-sm text-muted-foreground mb-3">
@@ -351,7 +362,7 @@
 							</div>
 
 							<!-- Post title -->
-							<h3 class="text-xl font-semibold mb-3 group-hover:text-primary transition-colors leading-tight" style="font-family: 'Cormorant Garamond', serif;">
+							<h3 class="text-xl font-semibold mb-3 group-hover:text-primary transition-colors leading-tight">
 								{post.title}
 							</h3>
 

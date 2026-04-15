@@ -9,7 +9,10 @@
 		type BlogPost,
 		type BlogPostMeta
 	} from '$lib/utils/blog';
-	import { Clock, User, ArrowLeft, Share, Calendar } from 'phosphor-svelte';
+	import { ClockIcon, UserIcon, ArrowLeftIcon, ShareIcon, CalendarIcon } from 'phosphor-svelte';
+	import { fade, fly, blur } from 'svelte/transition';
+	import { flip } from 'svelte/animate';
+	import { quintOut } from 'svelte/easing';
 
 	let post = $state<BlogPost | null>(null);
 	let relatedPosts = $state<BlogPostMeta[]>([]);
@@ -117,8 +120,8 @@
 	// Copy code functionality - use event delegation
 	$effect(() => {
 		function handleCodeCopy(event: MouseEvent) {
-			const button = event.target as HTMLButtonElement;
-			if (!button.classList.contains('code-block-copy')) return;
+			const button = (event.target as HTMLElement).closest('.code-block-copy') as HTMLButtonElement;
+			if (!button) return;
 
 			const wrapper = button.closest('.code-block-wrapper');
 			const code = wrapper?.querySelector('code');
@@ -177,7 +180,7 @@
 			<div class="container mx-auto px-4">
 				<div class="mx-auto max-w-3xl py-20 text-center">
 					<div class="text-muted-foreground/30 mb-8 text-8xl">📄</div>
-					<h1 class="mb-6 text-4xl font-semibold" style="font-family: 'Cormorant Garamond', serif;">
+					<h1 class="mb-6 text-4xl font-semibold">
 						Post not found
 					</h1>
 					<p class="text-muted-foreground mb-10 text-lg leading-relaxed">
@@ -204,7 +207,7 @@
 		<!-- Blog Post Content -->
 		<article>
 			<!-- Post Header -->
-			<section class="relative overflow-hidden border-b border-border/40 bg-background/50 py-20 sm:py-32">
+			<section class="relative overflow-hidden in:fade={{ duration: 600 }} border-b border-border/40 bg-background/50 py-20 sm:py-32">
 				<div class="absolute inset-0 pattern-seigaiha opacity-20"></div>
 
 				<div class="container mx-auto px-4 relative z-10">
@@ -226,7 +229,7 @@
 						</div>
 
 						<!-- Post Title -->
-						<h1 class="mb-6 text-4xl font-semibold leading-tight sm:text-5xl md:text-6xl" style="font-family: 'Cormorant Garamond', serif;">
+						<h1 class="mb-6 text-4xl font-semibold leading-tight sm:text-5xl md:text-6xl">
 							{post.title}
 						</h1>
 
@@ -363,7 +366,7 @@
 									<span class="text-4xl">👨‍💻</span>
 								</div>
 								<div class="text-center sm:text-left flex-1">
-									<h3 class="mb-3 text-2xl font-semibold" style="font-family: 'Cormorant Garamond', serif;">
+									<h3 class="mb-3 text-2xl font-semibold">
 										{post.author}
 									</h3>
 									<p class="text-muted-foreground mb-6 text-base leading-relaxed">
@@ -422,16 +425,19 @@
 								<div class="w-8 h-0.5 bg-primary"></div>
 								<span class="text-sm font-medium tracking-widest uppercase text-muted-foreground">Related</span>
 							</div>
-							<h2 class="text-3xl font-semibold" style="font-family: 'Cormorant Garamond', serif;">
+							<h2 class="text-3xl font-semibold">
 								You might also like
 							</h2>
 						</div>
 
 						<!-- Related posts grid -->
 						<div class="grid-japanese">
-							{#each relatedPosts as relatedPost}
-								<article class="card-japanese">
-									<a href={`/blog/${relatedPost.slug}`} class="block group">
+							{#each relatedPosts as relatedPost, index (relatedPost.slug)}
+									<article
+								class="card-japanese"
+								in:fly={{ y: 20, opacity: 0, delay: index * 100, duration: 500, easing: quintOut }}
+							>
+								<a href={`/blog/${relatedPost.slug}`} class="block group">
 										<!-- Post meta -->
 										<div class="flex items-center gap-4 text-sm text-muted-foreground mb-3">
 											<span class="flex items-center gap-1">
@@ -446,7 +452,7 @@
 										</div>
 
 										<!-- Post title -->
-										<h3 class="text-xl font-semibold mb-3 group-hover:text-primary transition-colors leading-tight" style="font-family: 'Cormorant Garamond', serif;">
+										<h3 class="text-xl font-semibold mb-3 group-hover:text-primary transition-colors leading-tight">
 											{relatedPost.title}
 										</h3>
 

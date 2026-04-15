@@ -4,7 +4,7 @@ description: "Practical techniques and best practices for optimizing web applica
 date: "2025-04-05"
 category: "Web Development"
 tags: ["performance", "optimization", "web", "best practices"]
-author: "Your Name"
+author: "Hanivan Rizky Sobari"
 featured: true
 image: ""
 ---

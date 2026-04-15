@@ -5,6 +5,8 @@
 	import { config } from '$lib/config';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import { HouseIcon, NewspaperIcon, ListIcon, XIcon } from 'phosphor-svelte';
+	import { fly, scale, fade } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 
 	let scrolled = $state(false);
 	let mobileMenuOpen = $state(false);
@@ -58,7 +60,7 @@
 			<a
 				href="/"
 				class="flex items-center gap-2 text-xl font-semibold transition-all duration-300 hover:text-primary group"
-				style="font-family: 'Cormorant Garamond', serif;"
+				
 			>
 				<span class="group-hover:tracking-wide transition-all duration-300">{config.site.name}</span>
 			</a>
@@ -111,15 +113,20 @@
 
 		<!-- Mobile Menu -->
 		{#if mobileMenuOpen}
-			<div class="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-md">
+			<div
+				class="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-md"
+				in:fly|global={{ y: -20, opacity: 0, duration: 300, easing: quintOut }}
+				out:fly|global={{ y: -20, opacity: 0, duration: 200, easing: quintOut }}
+			>
 				<nav class="py-4 space-y-1">
-					{#each navItems as item (item.href)}
+					{#each navItems as item, i (item.href)}
 						<a
 							href={item.href}
 							onclick={closeMobileMenu}
 							class="flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-300 rounded-lg {currentPath === item.href
 								? 'bg-primary/10 text-primary'
 								: 'text-muted-foreground hover:bg-accent hover:text-foreground'}"
+							in:fly|global={{ x: -20, opacity: 0, duration: 200, delay: i * 50, easing: quintOut }}
 						>
 							{#if item.href === '/'}
 								<HouseIcon size={20} weight={currentPath === item.href ? 'fill' : 'thin'} />
@@ -130,7 +137,10 @@
 						</a>
 					{/each}
 					<!-- Mobile Theme Toggle -->
-					<div class="px-4 py-3 border-t border-border/40 mt-2">
+					<div
+						class="px-4 py-3 border-t border-border/40 mt-2"
+						in:fly|global={{ x: -20, opacity: 0, duration: 200, delay: 150, easing: quintOut }}
+					>
 						<div class="flex items-center justify-between">
 							<span class="text-sm font-medium text-muted-foreground">Theme</span>
 							<ThemeToggle />

@@ -4,7 +4,7 @@ description: "Explore powerful CSS features and techniques that will take your s
 date: "2025-04-01"
 category: "CSS"
 tags: ["css", "styling", "modern", "frontend"]
-author: "Your Name"
+author: "Hanivan Rizky Sobari"
 featured: false
 image: ""
 ---

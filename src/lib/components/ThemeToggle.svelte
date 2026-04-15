@@ -2,6 +2,8 @@
 	import { SunIcon, MoonIcon, MonitorIcon } from 'phosphor-svelte';
 	import { setMode, resetMode } from 'mode-watcher';
 	import { DropdownMenu } from 'bits-ui';
+	import { fade } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 </script>
 
 <DropdownMenu.Root>
@@ -89,7 +91,10 @@
 		<div class="mx-3 my-1 h-px bg-border/60"></div>
 
 		<!-- Footer note -->
-		<div class="px-3 py-2 text-center">
+		<div
+			class="px-3 py-2 text-center"
+			in:fade={{ duration: 300, easing: quintOut }}
+		>
 			<p class="text-muted-foreground text-xs">
 				Theme preference saved
 			</p>

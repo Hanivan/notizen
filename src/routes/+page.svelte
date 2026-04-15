@@ -15,7 +15,7 @@
 				const response = await fetch('/api/blog?featured=true&limit=3');
 				if (response.ok) {
 					const data = await response.json();
-					featuredPosts = data.posts || [];
+					featuredPosts = data || [];
 				}
 			} catch (error) {
 				console.error('Failed to load featured posts:', error);
@@ -44,12 +44,12 @@
 			</div>
 
 			<!-- Main heading with Japanese minimalism -->
-			<h1 class="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight mb-6" style="font-family: 'Cormorant Garamond', serif;">
+			<h1 class="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight mb-6">
 				{config.personal.name}
 			</h1>
 
 			<!-- Subtitle with refined typography -->
-			<p class="text-xl md:text-2xl text-muted-foreground mb-4 max-w-2xl mx-auto" style="font-family: 'Noto Sans JP', sans-serif; letter-spacing: 0.05em;">
+			<p class="text-xl md:text-2xl text-muted-foreground mb-4 max-w-2xl mx-auto">
 				{config.personal.title}
 			</p>
 
@@ -99,7 +99,7 @@
 				<div class="w-8 h-0.5 bg-primary"></div>
 				<span class="text-sm font-medium tracking-widest uppercase text-muted-foreground">Featured</span>
 			</div>
-			<h2 class="text-4xl md:text-5xl font-semibold" style="font-family: 'Cormorant Garamond', serif;">
+			<h2 class="text-4xl md:text-5xl font-semibold">
 				Latest Writing
 			</h2>
 		</div>
@@ -134,7 +134,7 @@
 							</div>
 
 							<!-- Post title -->
-							<h3 class="text-xl font-semibold mb-2 group-hover:text-primary transition-colors" style="font-family: 'Cormorant Garamond', serif;">
+							<h3 class="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
 								{post.title}
 							</h3>
 
@@ -185,7 +185,7 @@
 							<UserIcon size={24} class="text-primary" />
 						</div>
 						<div>
-							<h3 class="text-2xl font-semibold mb-1" style="font-family: 'Cormorant Garamond', serif;">
+							<h3 class="text-2xl font-semibold mb-1">
 								About Me
 							</h3>
 							<p class="text-sm text-muted-foreground">{config.personal.location}</p>

@@ -1,7 +1,7 @@
-@import 'tailwindcss';
-
-/* Import refined Japanese-inspired typography */
+/* Import refined Japanese-inspired typography - MUST come first */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
+
+@import 'tailwindcss';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -146,7 +146,7 @@
 	body {
 		background-color: oklch(var(--color-background));
 		color: oklch(var(--color-foreground));
-		font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+		font-family: 'Noto Sans JP', sans-serif;
 		font-weight: 400;
 		line-height: 1.8;
 		letter-spacing: 0.02em;
@@ -176,19 +176,39 @@
 		z-index: 1;
 	}
 
-	/* Typography */
+	/* Typography - Global Font Rules */
 	h1,
 	h2,
 	h3,
 	h4,
 	h5,
 	h6 {
-		font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+		font-family: 'Cormorant Garamond', serif;
 		font-weight: 500;
 		line-height: 1.3;
 		letter-spacing: 0.02em;
 		margin-top: 0;
 		margin-bottom: 0.5em;
+	}
+
+	/* All other text uses Noto Sans JP */
+	p,
+	span,
+	div,
+	a,
+	button,
+	input,
+	textarea,
+	select,
+	li,
+	td,
+	th,
+	label,
+	.text-base,
+	.text-sm,
+	.text-lg,
+	.text-xl {
+		font-family: 'Noto Sans JP', sans-serif;
 	}
 
 	h1 {

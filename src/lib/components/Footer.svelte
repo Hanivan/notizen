@@ -8,7 +8,7 @@
 		<div class="grid gap-12 md:grid-cols-4">
 			<!-- Brand -->
 			<div class="space-y-4">
-				<h3 class="text-2xl font-semibold" style="font-family: 'Cormorant Garamond', serif;">
+				<h3 class="text-2xl font-semibold">
 					{config.site.name}
 				</h3>
 				<p class="text-muted-foreground text-sm leading-relaxed">
