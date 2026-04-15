@@ -9,7 +9,6 @@
 		type BlogPost,
 		type BlogPostMeta
 	} from '$lib/utils/blog';
-	import { onMount } from 'svelte';
 
 	let post = $state<BlogPost | null>(null);
 	let relatedPosts = $state<BlogPostMeta[]>([]);
@@ -18,10 +17,7 @@
 	let imageError = $state(false);
 	let imageLoaded = $state(false);
 
-	onMount(async () => {
-		await loadData();
-	});
-
+	// ✅ GOOD: Use top-level async instead of onMount
 	async function loadData() {
 		loading = true;
 		error = false;
@@ -60,6 +56,9 @@
 		const pathParts = window.location.pathname.split('/');
 		return pathParts[pathParts.length - 1] || null;
 	}
+
+	// Load data immediately
+	loadData();
 
 	let shareButtonText = $state('Share post');
 	let isSharing = $state(false);

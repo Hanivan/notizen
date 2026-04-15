@@ -10,7 +10,6 @@
 		searchPosts,
 		type BlogPostMeta
 	} from '$lib/utils/blog';
-	import { onMount } from 'svelte';
 	import { MagnifyingGlass } from 'phosphor-svelte';
 
 	// Svelte 5 state
@@ -29,23 +28,20 @@
 	let filteredPosts = $derived(applyFilters());
 	let displayTags = $derived(tags.slice(0, 12));
 
-	onMount(async () => {
-		// Get URL parameters
-		const urlParams = new URLSearchParams(window.location.search);
-		const categoryParam = urlParams.get('category');
-		const tagParam = urlParams.get('tag');
-		const searchParam = urlParams.get('search');
-
-		if (categoryParam) selectedCategory = categoryParam;
-		if (tagParam) selectedTag = tagParam;
-		if (searchParam) searchQuery = searchParam;
-
-		await loadData();
-	});
-
+	// ✅ GOOD: Use top-level async instead of onMount
 	async function loadData() {
 		loading = true;
 		try {
+			// Get URL parameters
+			const urlParams = new URLSearchParams(window.location.search);
+			const categoryParam = urlParams.get('category');
+			const tagParam = urlParams.get('tag');
+			const searchParam = urlParams.get('search');
+
+			if (categoryParam) selectedCategory = categoryParam;
+			if (tagParam) selectedTag = tagParam;
+			if (searchParam) searchQuery = searchParam;
+
 			posts = await loadBlogPosts();
 			categories = getUniqueCategories(posts);
 			tags = getUniqueTags(posts);
@@ -55,6 +51,9 @@
 			loading = false;
 		}
 	}
+
+	// Load data immediately
+	loadData();
 
 	function resetFilters() {
 		selectedCategory = 'all';
