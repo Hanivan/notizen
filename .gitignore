@@ -7,6 +7,9 @@ node_modules
 .wrangler
 /.svelte-kit
 /build
+/docs/superpowers
+/docs/todos
+/docs/pull-requests
 
 # OS
 .DS_Store

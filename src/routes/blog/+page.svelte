@@ -10,10 +10,18 @@
 		searchPosts,
 		type BlogPostMeta
 	} from '$lib/utils/blog';
-	import { MagnifyingGlass, Tag, Folder, X } from 'phosphor-svelte';
-	import { fade, fly, blur } from 'svelte/transition';
+	import { MagnifyingGlassIcon, TagIcon, FolderIcon, XIcon } from 'phosphor-svelte';
+	import { fade, fly } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import { quintOut } from 'svelte/easing';
+
+	// Tea ceremony easing - starts slow, deliberate motion, smooth finish
+	// Custom cubic bezier implementation for smooth, intentional animations
+	function teaCeremonyEasing(t: number): number {
+		// Simplified smooth easing that starts slow and ends smoothly
+		// This creates a natural, flowing motion like tea being poured
+		return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+	}
 
 	// Svelte 5 state
 	let posts = $state<BlogPostMeta[]>([]);
@@ -96,25 +104,40 @@
 	<div class="container mx-auto px-4 relative z-10">
 		<div class="mx-auto max-w-4xl text-center">
 			<!-- Badge -->
-			<div class="inline-flex items-center gap-2 mb-6 badge-accent">
+			<div
+				class="inline-flex items-center gap-2 mb-6 badge-accent"
+				in:fade={{ duration: 350, delay: 0, easing: teaCeremonyEasing }}
+			>
 				<span>Blog</span>
 			</div>
 
 			<!-- Main heading -->
-			<h1 class="mb-6 text-5xl font-semibold tracking-tight sm:text-6xl md:text-7xl">
+			<h1
+				class="mb-6 text-5xl font-semibold tracking-tight sm:text-6xl md:text-7xl"
+				in:fade={{ duration: 400, delay: 100, easing: teaCeremonyEasing }}
+			>
 				Writing
 			</h1>
 
 			<!-- Subtitle -->
-			<p class="text-muted-foreground mb-12 text-xl leading-relaxed max-w-2xl mx-auto">
+			<p
+				class="text-muted-foreground mb-12 text-xl leading-relaxed max-w-2xl mx-auto"
+				in:fade={{ duration: 400, delay: 200, easing: teaCeremonyEasing }}
+			>
 				{config.site.tagline}
 			</p>
 
 			<!-- Decorative divider -->
-			<div class="divider-japanese max-w-xs mx-auto mb-12"></div>
+			<div
+				class="divider-japanese max-w-xs mx-auto mb-12"
+				in:fade={{ duration: 350, delay: 300, easing: teaCeremonyEasing }}
+			></div>
 
 			<!-- Search Bar - Japanese minimalism style -->
-			<div class="relative mx-auto max-w-2xl">
+			<div
+				class="relative mx-auto max-w-2xl"
+				in:fly={{ y: 10, duration: 400, delay: 350, easing: teaCeremonyEasing }}
+			>
 				<input
 					type="search"
 					placeholder="Search articles..."
@@ -122,12 +145,13 @@
 					class="w-full border-input bg-background px-6 py-4 pl-14 text-base rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all"
 				/>
 				<div class="text-muted-foreground absolute top-1/2 left-5 -translate-y-1/2 flex items-center justify-center">
-					<MagnifyingGlass size={22} weight="thin" />
+					<MagnifyingGlassIcon size={22} weight="thin" />
 				</div>
 			</div>
 		</div>
 	</div>
 </section>
+
 
 <!-- Filters Section -->
 {#if !loading && (categories.length > 0 || tags.length > 0)}
@@ -136,28 +160,23 @@
 			<!-- Category Filters -->
 			{#if categories.length > 0}
 				<div class="mb-6">
-					<div class="flex items-center gap-2 mb-3">
-						<Folder size={16} class="text-primary" />
+					<div
+						class="flex items-center gap-2 mb-3"
+						in:fly={{ y: 12, duration: 350, delay: 0, easing: teaCeremonyEasing }}
+					>
+						<FolderIcon size={16} class="text-primary" />
 						<span class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Categories</span>
 					</div>
 					<div class="flex flex-wrap gap-2">
-						<button
-							class="px-4 py-2 text-sm font-medium transition-all duration-300 rounded-lg {selectedCategory === 'all'
-								? 'bg-primary text-primary-foreground shadow-md'
-								: 'bg-background border border-border hover:border-primary/50 hover:bg-accent'}"
-							onclick={() => (selectedCategory = 'all')}
-						>
-							All
-						</button>
-						{#each categories as category}
+						{#each [{ label: 'All', value: 'all' }, ...categories.map(c => ({ label: c, value: c.toLowerCase() }))] as filter, index (filter.value)}
 							<button
-								class="px-4 py-2 text-sm font-medium transition-all duration-300 rounded-lg {selectedCategory ===
-								category.toLowerCase()
+								class="px-4 py-2 text-sm font-medium transition-all duration-300 rounded-lg {selectedCategory === filter.value
 									? 'bg-primary text-primary-foreground shadow-md'
 									: 'bg-background border border-border hover:border-primary/50 hover:bg-accent'}"
-								onclick={() => (selectedCategory = category.toLowerCase())}
+								onclick={() => (selectedCategory = filter.value)}
+								in:fly={{ y: 10, duration: 350, delay: 75 + (index * 50), easing: teaCeremonyEasing }}
 							>
-								{category}
+								{filter.label}
 							</button>
 						{/each}
 					</div>
@@ -167,12 +186,15 @@
 			<!-- Tag Filters -->
 			{#if tags.length > 0}
 				<div>
-					<div class="flex items-center gap-2 mb-3">
-						<Tag size={16} class="text-primary" />
+					<div
+						class="flex items-center gap-2 mb-3"
+						in:fly={{ y: 12, duration: 350, delay: 150, easing: teaCeremonyEasing }}
+					>
+						<TagIcon size={16} class="text-primary" />
 						<span class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Tags</span>
 					</div>
 					<div class="flex flex-wrap gap-2">
-						{#each displayTags as tag}
+						{#each displayTags as tag, index (tag)}
 							<button
 								class="px-3 py-1.5 text-xs font-medium transition-all duration-300 rounded-md {selectedTag ===
 								tag.toLowerCase()
@@ -180,6 +202,7 @@
 									: 'bg-background border border-border hover:border-primary/50 hover:bg-accent'}"
 								onclick={() =>
 									(selectedTag = selectedTag === tag.toLowerCase() ? '' : tag.toLowerCase())}
+								in:fly={{ y: 10, duration: 350, delay: 225 + (index * 40), easing: teaCeremonyEasing }}
 							>
 								{tag}
 							</button>
@@ -196,19 +219,19 @@
 					</span>
 					{#if selectedCategory !== 'all'}
 						<span class="bg-secondary text-secondary-foreground px-3 py-1 text-xs rounded-md flex items-center gap-2">
-							<Folder size={12} />
+							<FolderIcon size={12} />
 							{selectedCategory}
 						</span>
 					{/if}
 					{#if selectedTag}
 						<span class="bg-secondary text-secondary-foreground px-3 py-1 text-xs rounded-md flex items-center gap-2">
-							<Tag size={12} />
+							<TagIcon size={12} />
 							{selectedTag}
 						</span>
 					{/if}
 					{#if searchQuery}
 						<span class="bg-secondary text-secondary-foreground px-3 py-1 text-xs rounded-md flex items-center gap-2">
-							<MagnifyingGlass size={12} />
+							<MagnifyingGlassIcon size={12} />
 							"{searchQuery}"
 						</span>
 					{/if}
@@ -216,7 +239,7 @@
 						class="text-muted-foreground hover:text-foreground text-xs font-medium underline underline-offset-2 transition-colors flex items-center gap-1"
 						onclick={resetFilters}
 					>
-						<X size={12} />
+						<XIcon size={12} />
 						Clear all
 					</button>
 				</div>
@@ -242,7 +265,7 @@
 		<div class="container mx-auto px-4">
 			<div class="mx-auto max-w-2xl py-16 text-center">
 				<div class="w-20 h-20 rounded-full bg-muted mx-auto mb-6 flex items-center justify-center">
-					<MagnifyingGlass size={40} class="text-muted-foreground" />
+					<MagnifyingGlassIcon size={40} class="text-muted-foreground" />
 				</div>
 				<h1 class="mb-4 text-3xl font-semibold">
 					No posts found
@@ -270,7 +293,7 @@
 	{#if featuredPosts.length > 0 && selectedCategory === 'all' && !selectedTag && !searchQuery}
 		<section class="border-b border-border/40 bg-muted/20 py-16">
 			<div class="container mx-auto px-4">
-				<div class="mb-10" in:fly={{ y: -20, opacity: 0, duration: 600, easing: quintOut }}>
+				<div class="mb-10" in:fly={{ y: 15, duration: 375, delay: 0, easing: teaCeremonyEasing }}>
 					<div class="flex items-center gap-3 mb-2">
 						<div class="w-8 h-0.5 bg-primary"></div>
 						<span class="text-sm font-medium tracking-widest uppercase text-muted-foreground">Featured</span>
@@ -284,14 +307,14 @@
 					{#each featuredPosts as post, index (post.slug)}
 						<article
 							class="card-japanese"
-							in:fly={{ y: 30, opacity: 0, delay: index * 100, duration: 600, easing: quintOut }}
+							in:fly={{ y: 10, duration: 375, delay: 100 + (index * 60), easing: teaCeremonyEasing }}
 							animate:flip={{ duration: 400 }}
 						>
 							<a href={`/blog/${post.slug}`} class="block group">
 								<!-- Post meta -->
 								<div class="flex items-center gap-4 text-sm text-muted-foreground mb-3">
 									<span class="flex items-center gap-1">
-										<Folder size={14} />
+										<FolderIcon size={14} />
 										{post.category || 'General'}
 									</span>
 									<span>•</span>
@@ -327,7 +350,7 @@
 	<!-- All Posts -->
 	<section class="py-16">
 		<div class="container mx-auto px-4">
-			<div class="mb-10" in:fly={{ y: -20, opacity: 0, duration: 600, easing: quintOut }}>
+			<div class="mb-10" in:fly={{ y: 15, duration: 375, delay: 0, easing: teaCeremonyEasing }}>
 				<div class="flex items-center justify-between">
 					<div>
 						<div class="flex items-center gap-3 mb-2">
@@ -345,14 +368,14 @@
 				{#each filteredPosts as post, index (post.slug)}
 					<article
 						class="card-japanese"
-						in:fly={{ y: 30, opacity: 0, delay: index * 50, duration: 500, easing: quintOut }}
+						in:fly={{ y: 10, duration: 375, delay: 80 + (index * 50), easing: teaCeremonyEasing }}
 						animate:flip={{ duration: 400 }}
 					>
 						<a href={`/blog/${post.slug}`} class="block group">
 							<!-- Post meta -->
 							<div class="flex items-center gap-4 text-sm text-muted-foreground mb-3">
 								<span class="flex items-center gap-1">
-									<Folder size={14} />
+									<FolderIcon size={14} />
 									{post.category || 'General'}
 								</span>
 								<span>•</span>
@@ -411,6 +434,25 @@
 	@media (min-width: 1024px) {
 		section {
 			position: relative;
+		}
+	}
+
+	/* Mobile-specific animation adjustments */
+	@media (max-width: 640px) {
+		/* Reduce fly distance on mobile for subtler motion */
+		:global(.card-japanese) {
+			animation: mobileFadeIn 0.4s ease-out;
+		}
+	}
+
+	@keyframes mobileFadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
 		}
 	}
 </style>
