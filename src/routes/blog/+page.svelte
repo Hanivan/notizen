@@ -14,6 +14,7 @@
 	import { fade, fly } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import { quintOut } from 'svelte/easing';
+	import BlogCard from '$lib/components/BlogCard.svelte';
 
 	// Tea ceremony easing - starts slow, deliberate motion, smooth finish
 	// Custom cubic bezier implementation for smooth, intentional animations
@@ -305,42 +306,7 @@
 
 				<div class="grid-japanese max-w-7xl mx-auto">
 					{#each featuredPosts as post, index (post.slug)}
-						<article
-							class="card-japanese"
-							in:fly={{ y: 10, duration: 375, delay: 100 + (index * 60), easing: teaCeremonyEasing }}
-							animate:flip={{ duration: 400 }}
-						>
-							<a href={`/blog/${post.slug}`} class="block group">
-								<!-- Post meta -->
-								<div class="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-									<span class="flex items-center gap-1">
-										<FolderIcon size={14} />
-										{post.category || 'General'}
-									</span>
-									<span>•</span>
-									<time datetime={post.date}>
-										{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-									</time>
-								</div>
-
-								<!-- Post title -->
-								<h3 class="text-2xl font-semibold mb-3 group-hover:text-primary transition-colors leading-tight">
-									{post.title}
-								</h3>
-
-								<!-- Post excerpt -->
-								<p class="text-muted-foreground line-clamp-2 mb-4 leading-relaxed">
-									{post.description || post.excerpt}
-								</p>
-
-								<!-- Reading time -->
-								{#if post.readingTime}
-									<div class="flex items-center gap-2 text-xs text-muted-foreground">
-										<span>{post.readingTime} min read</span>
-									</div>
-								{/if}
-							</a>
-						</article>
+						<BlogCard {post} {index} delay={100} stagger={60} variant="featured" />
 					{/each}
 				</div>
 			</div>
@@ -366,51 +332,7 @@
 
 			<div class="grid-japanese max-w-7xl mx-auto">
 				{#each filteredPosts as post, index (post.slug)}
-					<article
-						class="card-japanese"
-						in:fly={{ y: 10, duration: 375, delay: 80 + (index * 50), easing: teaCeremonyEasing }}
-						animate:flip={{ duration: 400 }}
-					>
-						<a href={`/blog/${post.slug}`} class="block group">
-							<!-- Post meta -->
-							<div class="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-								<span class="flex items-center gap-1">
-									<FolderIcon size={14} />
-									{post.category || 'General'}
-								</span>
-								<span>•</span>
-								<time datetime={post.date}>
-									{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-								</time>
-							</div>
-
-							<!-- Post title -->
-							<h3 class="text-xl font-semibold mb-3 group-hover:text-primary transition-colors leading-tight">
-								{post.title}
-							</h3>
-
-							<!-- Post excerpt -->
-							<p class="text-muted-foreground line-clamp-2 mb-4 leading-relaxed">
-								{post.description || post.excerpt}
-							</p>
-
-							<!-- Tags -->
-							{#if post.tags && post.tags.length > 0}
-								<div class="flex flex-wrap gap-2 mb-4">
-									{#each post.tags.slice(0, 3) as tag}
-										<span class="badge-accent text-xs">{tag}</span>
-									{/each}
-								</div>
-							{/if}
-
-							<!-- Reading time -->
-							{#if post.readingTime}
-								<div class="flex items-center gap-2 text-xs text-muted-foreground">
-									<span>{post.readingTime} min read</span>
-								</div>
-							{/if}
-						</a>
-					</article>
+					<BlogCard {post} {index} delay={80} stagger={50} variant="default" />
 				{/each}
 			</div>
 		</div>
@@ -420,8 +342,7 @@
 <style>
 	/* Smooth transitions */
 	button,
-	input,
-	a {
+	input {
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 

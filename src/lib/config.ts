@@ -10,8 +10,9 @@ export const config = {
 		title: 'Development Blog',
 		email: 'hello@hanivan.my.id',
 		location: 'Indonesia',
-		bio: 'Full-stack developer sharing thoughts, tutorials, and insights about development, design, and technology.',
-		profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop'
+		bio: 'Fullstack Web Developer with a strong passion for backend development. Sharing thoughts, tutorials, and insights about software architecture, APIs, databases, and web development.',
+		profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop',
+			intro: "I'm a developer passionate about building elegant solutions to complex problems. This blog is where I share my thoughts, tutorials, and insights about software development, design patterns, and technology."
 	},
 
 	// Site Information

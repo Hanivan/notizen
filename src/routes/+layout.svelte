@@ -22,7 +22,8 @@
 	// Scroll to top after navigation (proper SvelteKit way)
 	afterNavigate(() => {
 		if (browser) {
-			window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+			// Use instant scroll to avoid timing issues with page rendering
+			window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 		}
 	});
 </script>

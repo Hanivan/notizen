@@ -13,6 +13,7 @@
 	import { fade, fly, blur } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import { quintOut } from 'svelte/easing';
+	import BlogCard from '$lib/components/BlogCard.svelte';
 
 	let post = $state<BlogPost | null>(null);
 	let relatedPosts = $state<BlogPostMeta[]>([]);
@@ -430,50 +431,14 @@
 							</h2>
 						</div>
 
-						<!-- Related posts grid -->
-						<div class="grid-japanese">
+							<!-- Related posts grid -->
+							<div class="grid-japanese">
 							{#each relatedPosts as relatedPost, index (relatedPost.slug)}
-									<article
-								class="card-japanese"
-								in:fly={{ y: 20, opacity: 0, delay: index * 100, duration: 500, easing: quintOut }}
-							>
-								<a href={`/blog/${relatedPost.slug}`} class="block group">
-										<!-- Post meta -->
-										<div class="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-											<span class="flex items-center gap-1">
-												<CalendarIcon size={14} weight="thin" />
-												<time datetime={relatedPost.date}>
-													{new Date(relatedPost.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-												</time>
-											</span>
-											{#if relatedPost.category}
-												<span class="badge-accent text-xs">{relatedPost.category}</span>
-											{/if}
-										</div>
-
-										<!-- Post title -->
-										<h3 class="text-xl font-semibold mb-3 group-hover:text-primary transition-colors leading-tight">
-											{relatedPost.title}
-										</h3>
-
-										<!-- Post excerpt -->
-										<p class="text-muted-foreground line-clamp-2 mb-4 leading-relaxed">
-											{relatedPost.description || relatedPost.excerpt}
-										</p>
-
-										<!-- Reading time -->
-										{#if relatedPost.readingTime}
-											<div class="flex items-center gap-2 text-xs text-muted-foreground">
-												<ClockIcon size={14} weight="thin" />
-												<span>{relatedPost.readingTime} min read</span>
-											</div>
-										{/if}
-									</a>
-								</article>
+								<BlogCard post={relatedPost} {index} delay={0} stagger={100} variant="default" />
 							{/each}
+							</div>
 						</div>
 					</div>
-				</div>
 			</section>
 		{/if}
 	{/if}

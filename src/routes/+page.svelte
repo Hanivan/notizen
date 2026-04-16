@@ -4,6 +4,7 @@
 	import { fade, fly } from 'svelte/transition';
 	import { browser } from '$app/environment';
 	import type { BlogPostMeta } from '$lib/utils/blog';
+	import BlogCard from '$lib/components/BlogCard.svelte';
 
 	// Tea ceremony easing - matches blog page for consistency
 	// Custom easing function that starts slow and ends smoothly
@@ -155,49 +156,9 @@
 			</div>
 		{:else if featuredPosts.length > 0}
 			<div class="grid-japanese max-w-6xl mx-auto">
-				{#each featuredPosts as post, index (post.slug)}
-					<article
-						class="card-japanese group"
-						in:fly={{ y: 10, duration: 375, delay: 100 + (index * 60), easing: teaCeremonyEasing }}
-					>
-						<a href={`/blog/${post.slug}`} class="block">
-							<!-- Post meta -->
-							<div class="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-								<span class="flex items-center gap-1">
-									<CalendarIcon size={14} />
-									<time datetime={post.date}>
-										{new Date(post.date).toLocaleDateString('en-US', {
-											month: 'short',
-											day: 'numeric',
-											year: 'numeric'
-										})}
-									</time>
-								</span>
-								{#if post.category}
-									<span class="badge-accent text-xs">{post.category}</span>
-								{/if}
-							</div>
-
-							<!-- Post title -->
-							<h3 class="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-								{post.title}
-							</h3>
-
-							<!-- Post excerpt -->
-							<p class="text-muted-foreground line-clamp-2 mb-4">
-								{post.description || post.excerpt}
-							</p>
-
-							<!-- Read more link -->
-							<div
-								class="flex items-center gap-2 text-sm font-medium text-primary group-hover:gap-3 transition-all"
-							>
-								<span>Read more</span>
-								<ArrowRightIcon size={16} class="group-hover:translate-x-1 transition-transform" />
-							</div>
-						</a>
-					</article>
-				{/each}
+					{#each featuredPosts as post, index (post.slug)}
+						<BlogCard {post} {index} delay={100} stagger={60} variant="default" />
+					{/each}
 			</div>
 		{:else}
 			<div
@@ -251,9 +212,7 @@
 					</div>
 
 					<p class="text-muted-foreground leading-relaxed mb-6">
-						Hi, I'm {config.personal.name}. I'm a developer passionate about building elegant solutions
-						to complex problems. This blog is where I share my thoughts, tutorials, and insights about
-						software development, design patterns, and technology.
+						Hi, I'm {config.personal.name}. {config.personal.intro}
 					</p>
 
 					<div class="flex flex-wrap gap-3">
