@@ -39,8 +39,13 @@ export const config = {
 
 	// Social Media Links
 	social: {
+		instagram: {
+			url: 'https://instagram.com/hanivanrizky',
+			icon: 'Instagram',
+			label: 'Instagram'
+		},
 		github: {
-			url: 'https://github.com/Hanivan/',
+			url: 'https://github.com/Hanivan',
 			icon: 'GitHub',
 			label: 'GitHub'
 		},

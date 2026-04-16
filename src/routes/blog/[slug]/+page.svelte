@@ -217,7 +217,7 @@
 							href="/blog"
 							class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-8 transition-colors group"
 						>
-							<ArrowLeft size={18} class="group-hover:-translate-x-1 transition-transform" />
+							<ArrowLeftIcon size={18} class="group-hover:-translate-x-1 transition-transform" />
 							<span>Back to articles</span>
 						</a>
 
@@ -244,15 +244,15 @@
 						<!-- Post Meta -->
 						<div class="mt-10 flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
 							<div class="flex items-center gap-2">
-								<User size={18} weight="thin" />
+								<UserIcon size={18} weight="thin" />
 								<span class="font-medium text-foreground">{post.author}</span>
 							</div>
 							<div class="flex items-center gap-2">
-								<Calendar size={18} weight="thin" />
+								<CalendarIcon size={18} weight="thin" />
 								<time datetime={post.date} class="font-medium">{formatDate(post.date)}</time>
 							</div>
 							<div class="flex items-center gap-2">
-								<Clock size={18} weight="thin" />
+								<ClockIcon size={18} weight="thin" />
 								<span class="font-medium">{post.readingTime} min read</span>
 							</div>
 						</div>
@@ -327,7 +327,7 @@
 									disabled={isSharing}
 									class="inline-flex items-center gap-2 border-border hover:border-primary/30 hover:bg-accent border px-6 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-70"
 								>
-									<Share size={18} weight="thin" />
+									<ShareIcon size={18} weight="thin" />
 									<span>{shareButtonText}</span>
 								</button>
 								<a
@@ -397,7 +397,7 @@
 								href="/blog"
 								class="inline-flex items-center gap-2 border-border hover:border-primary/30 hover:bg-accent border px-6 py-3 text-sm font-medium rounded-lg transition-all duration-300 group"
 							>
-								<ArrowLeft size={18} class="group-hover:-translate-x-1 transition-transform" />
+								<ArrowLeftIcon size={18} class="group-hover:-translate-x-1 transition-transform" />
 								<span>All Articles</span>
 							</a>
 							<button
@@ -405,7 +405,7 @@
 								disabled={isSharing}
 								class="inline-flex items-center gap-2 border-border hover:border-primary/30 hover:bg-accent border px-6 py-3 text-sm font-medium rounded-lg transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-70"
 							>
-								<Share size={18} weight="thin" />
+								<ShareIcon size={18} weight="thin" />
 								<span>{shareButtonText}</span>
 							</button>
 						</div>
@@ -441,7 +441,7 @@
 										<!-- Post meta -->
 										<div class="flex items-center gap-4 text-sm text-muted-foreground mb-3">
 											<span class="flex items-center gap-1">
-												<Calendar size={14} weight="thin" />
+												<CalendarIcon size={14} weight="thin" />
 												<time datetime={relatedPost.date}>
 													{new Date(relatedPost.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
 												</time>
@@ -464,7 +464,7 @@
 										<!-- Reading time -->
 										{#if relatedPost.readingTime}
 											<div class="flex items-center gap-2 text-xs text-muted-foreground">
-												<Clock size={14} weight="thin" />
+												<ClockIcon size={14} weight="thin" />
 												<span>{relatedPost.readingTime} min read</span>
 											</div>
 										{/if}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { config } from '$lib/config';
-	import { GithubLogoIcon, XLogoIcon, EnvelopeIcon } from 'phosphor-svelte';
+	import { GithubLogoIcon, XLogoIcon, EnvelopeIcon, InstagramLogoIcon } from 'phosphor-svelte';
 </script>
 
 <footer class="border-t border-border/40 bg-muted/30">
@@ -24,7 +24,7 @@
 					Navigation
 				</h3>
 				<ul class="space-y-3">
-					{#each config.navigation.main as item}
+					{#each config.navigation.main as item (item.href)}
 						<li>
 							<a
 								href={item.href}
@@ -35,7 +35,7 @@
 							</a>
 						</li>
 					{/each}
-					{#each config.navigation.secondary as item}
+					{#each config.navigation.secondary as item (item.href)}
 						<li>
 							<a
 								href={item.href}
@@ -55,7 +55,7 @@
 					Connect
 				</h3>
 				<div class="flex gap-3">
-					{#each Object.values(config.social) as social}
+					{#each Object.values(config.social) as social (social.url)}
 						<a
 							href={social.url}
 							target="_blank"
@@ -69,6 +69,8 @@
 								<XLogoIcon size={20} weight="thin" />
 							{:else if social.label === 'Email'}
 								<EnvelopeIcon size={20} weight="thin" />
+							{:else if social.label === 'Instagram'}
+								<InstagramLogoIcon size={20} weight="thin" />
 							{/if}
 						</a>
 					{/each}
