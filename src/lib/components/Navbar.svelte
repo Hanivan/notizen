@@ -51,18 +51,18 @@
 
 <header
 	class="navbar-fixed w-full transition-all duration-500 {scrolled
-		? 'bg-background/95 backdrop-blur-md border-b border-border/40 shadow-sm'
-		: 'bg-transparent border-b border-transparent'}"
+		? 'border-b border-border/40 bg-background/95 shadow-sm backdrop-blur-md'
+		: 'border-b border-transparent bg-transparent'}"
 >
 	<div class="container mx-auto px-4">
 		<div class="flex h-16 items-center justify-between">
 			<!-- Logo/Brand -->
 			<a
 				href="/"
-				class="flex items-center gap-2 text-xl font-semibold transition-all duration-300 hover:text-primary group"
-				
+				class="group flex items-center gap-2 text-xl font-semibold transition-all duration-300 hover:text-primary"
 			>
-				<span class="group-hover:tracking-wide transition-all duration-300">{config.site.name}</span>
+				<span class="transition-all duration-300 group-hover:tracking-wide">{config.site.name}</span
+				>
 			</a>
 
 			<!-- Desktop Navigation -->
@@ -70,7 +70,8 @@
 				{#each navItems as item (item.href)}
 					<a
 						href={item.href}
-						class="text-muted-foreground hover:text-foreground text-sm font-medium transition-all duration-300 relative py-2 {currentPath === item.href
+						class="relative py-2 text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground {currentPath ===
+						item.href
 							? 'text-foreground'
 							: ''}"
 					>
@@ -83,7 +84,7 @@
 							<span>{item.label}</span>
 						</div>
 						{#if currentPath === item.href}
-							<span class="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"></span>
+							<span class="absolute right-0 bottom-0 left-0 h-0.5 bg-primary"></span>
 						{/if}
 					</a>
 				{/each}
@@ -99,7 +100,7 @@
 				<!-- Mobile Menu Button -->
 				<button
 					onclick={toggleMobileMenu}
-					class="text-muted-foreground hover:text-foreground md:hidden transition-colors p-2 rounded-lg hover:bg-accent"
+					class="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground md:hidden"
 					aria-label="Toggle menu"
 				>
 					{#if mobileMenuOpen}
@@ -114,16 +115,17 @@
 		<!-- Mobile Menu -->
 		{#if mobileMenuOpen}
 			<div
-				class="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-md"
+				class="border-t border-border/40 bg-background/95 backdrop-blur-md md:hidden"
 				in:fly|global={{ y: -20, opacity: 0, duration: 300, easing: quintOut }}
 				out:fly|global={{ y: -20, opacity: 0, duration: 200, easing: quintOut }}
 			>
-				<nav class="py-4 space-y-1">
+				<nav class="space-y-1 py-4">
 					{#each navItems as item, i (item.href)}
 						<a
 							href={item.href}
 							onclick={closeMobileMenu}
-							class="flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-300 rounded-lg {currentPath === item.href
+							class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all duration-300 {currentPath ===
+							item.href
 								? 'bg-primary/10 text-primary'
 								: 'text-muted-foreground hover:bg-accent hover:text-foreground'}"
 							in:fly|global={{ x: -20, opacity: 0, duration: 200, delay: i * 50, easing: quintOut }}
@@ -138,7 +140,7 @@
 					{/each}
 					<!-- Mobile Theme Toggle -->
 					<div
-						class="px-4 py-3 border-t border-border/40 mt-2"
+						class="mt-2 border-t border-border/40 px-4 py-3"
 						in:fly|global={{ x: -20, opacity: 0, duration: 200, delay: 150, easing: quintOut }}
 					>
 						<div class="flex items-center justify-between">

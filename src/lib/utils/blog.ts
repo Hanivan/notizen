@@ -185,7 +185,9 @@ marked.use({
 	breaks: true
 });
 
-export async function parseMarkdown(markdown: string): Promise<{ content: string; data: Record<string, any> }> {
+export async function parseMarkdown(
+	markdown: string
+): Promise<{ content: string; data: Record<string, any> }> {
 	const parsed = matter(markdown);
 	const content = await marked(parsed.content);
 	return { content, data: parsed.data || {} };
@@ -351,40 +353,4 @@ function calculateRelatedScore(post: BlogPostMeta, currentPost: BlogPostMeta): n
 	}
 
 	return score;
-}
-
-// Client-side blog post loading functions
-export async function loadBlogPost(slug: string): Promise<BlogPost | null> {
-	try {
-		const response = await fetch(`/api/blog/${slug}`);
-		if (!response.ok) return null;
-		return await response.json();
-	} catch (error) {
-		console.error('Error loading blog post:', error);
-		return null;
-	}
-}
-
-export async function loadBlogPosts(options?: {
-	category?: string;
-	tag?: string;
-	search?: string;
-	featured?: boolean;
-	limit?: number;
-}): Promise<BlogPostMeta[]> {
-	try {
-		const params = new URLSearchParams();
-		if (options?.category) params.append('category', options.category);
-		if (options?.tag) params.append('tag', options.tag);
-		if (options?.search) params.append('search', options.search);
-		if (options?.featured) params.append('featured', 'true');
-		if (options?.limit) params.append('limit', options.limit.toString());
-
-		const response = await fetch(`/api/blog?${params.toString()}`);
-		if (!response.ok) return [];
-		return await response.json();
-	} catch (error) {
-		console.error('Error loading blog posts:', error);
-		return [];
-	}
 }

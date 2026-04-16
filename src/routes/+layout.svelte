@@ -88,12 +88,12 @@
 
 <ModeWatcher />
 
-<div class="min-h-screen flex flex-col">
+<div class="flex min-h-screen flex-col">
 	<!-- Navbar -->
 	<Navbar />
 
 	<!-- Main Content -->
-	<main class="flex-1 main-content">
+	<main class="main-content flex-1">
 		{@render children()}
 	</main>
 

@@ -39,10 +39,10 @@
 <article class="group block h-full">
 	<a
 		href="/blog/{post.slug}"
-		class="border-border hover:border-primary/50 bg-card hover:bg-card/80 flex h-full flex-col gap-4 border p-4 transition-all duration-300 hover:shadow-lg {variant ===
+		class="flex h-full flex-col gap-4 border border-border bg-card p-4 transition-all duration-300 hover:border-primary/50 hover:bg-card/80 hover:shadow-lg {variant ===
 		'compact'
 			? ''
-			: 'sm:flex-row'} {featured ? 'ring-primary/30 ring-1' : ''}"
+			: 'sm:flex-row'} {featured ? 'ring-1 ring-primary/30' : ''}"
 	>
 		<!-- Image Section -->
 		<div
@@ -61,7 +61,7 @@
 					onload={handleImageLoad}
 				/>
 				{#if !imageLoaded}
-					<div class="bg-muted h-full w-full animate-pulse"></div>
+					<div class="h-full w-full animate-pulse bg-muted"></div>
 				{/if}
 			{:else}
 				<!-- Emoji Fallback -->
@@ -74,7 +74,7 @@
 						>
 							{postEmoji}
 						</div>
-						<div class="text-muted-foreground/60 text-xs">{post.category}</div>
+						<div class="text-xs text-muted-foreground/60">{post.category}</div>
 					</div>
 				</div>
 			{/if}
@@ -83,12 +83,14 @@
 			{#if featured || isRecent}
 				<div class="absolute top-2 left-2 flex gap-2">
 					{#if featured}
-						<div class="bg-primary/90 backdrop-blur-sm px-2 py-1 text-xs font-semibold text-white">
+						<div class="bg-primary/90 px-2 py-1 text-xs font-semibold text-white backdrop-blur-sm">
 							Featured
 						</div>
 					{/if}
 					{#if isRecent}
-						<div class="bg-green-500/90 backdrop-blur-sm px-2 py-1 text-xs font-semibold text-white">
+						<div
+							class="bg-green-500/90 px-2 py-1 text-xs font-semibold text-white backdrop-blur-sm"
+						>
 							New
 						</div>
 					{/if}
@@ -100,7 +102,7 @@
 		<div class="flex min-w-0 flex-1 flex-col">
 			<!-- Category and Reading Time -->
 			<div class="mb-3 flex items-center justify-between text-xs">
-				<span class="bg-muted text-muted-foreground px-2 py-1 font-semibold uppercase">
+				<span class="bg-muted px-2 py-1 font-semibold text-muted-foreground uppercase">
 					{post.category}
 				</span>
 				<span class="text-muted-foreground">{post.readingTime} min read</span>
@@ -108,13 +110,13 @@
 
 			<!-- Title -->
 			<h3
-				class="text-foreground mb-3 line-clamp-2 text-lg font-semibold transition-colors group-hover:text-primary"
+				class="mb-3 line-clamp-2 text-lg font-semibold text-foreground transition-colors group-hover:text-primary"
 			>
 				{post.title}
 			</h3>
 
 			<!-- Description -->
-			<p class="text-muted-foreground mb-4 line-clamp-3 flex-1 text-sm leading-relaxed">
+			<p class="mb-4 line-clamp-3 flex-1 text-sm leading-relaxed text-muted-foreground">
 				{post.excerpt}
 			</p>
 
@@ -127,7 +129,7 @@
 					{:else}
 						<div></div>
 					{/if}
-					<time class="text-muted-foreground text-xs" datetime={post.date} title={displayDate}>
+					<time class="text-xs text-muted-foreground" datetime={post.date} title={displayDate}>
 						{displayDate}
 					</time>
 				</div>
@@ -136,12 +138,16 @@
 				{#if post.tags.length > 0}
 					<div class="flex flex-wrap gap-2">
 						{#each post.tags.slice(0, variant === 'compact' ? 2 : 3) as tag (tag)}
-							<span class="bg-muted text-muted-foreground border border-border/50 px-2 py-1 text-xs">
+							<span
+								class="border border-border/50 bg-muted px-2 py-1 text-xs text-muted-foreground"
+							>
 								{tag}
 							</span>
 						{/each}
 						{#if post.tags.length > (variant === 'compact' ? 2 : 3)}
-							<span class="bg-muted text-muted-foreground border border-border/50 px-2 py-1 text-xs font-medium">
+							<span
+								class="border border-border/50 bg-muted px-2 py-1 text-xs font-medium text-muted-foreground"
+							>
 								+{post.tags.length - (variant === 'compact' ? 2 : 3)}
 							</span>
 						{/if}

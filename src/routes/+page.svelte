@@ -5,6 +5,7 @@
 	import { browser } from '$app/environment';
 	import type { BlogPostMeta } from '$lib/utils/blog';
 	import BlogCard from '$lib/components/BlogCard.svelte';
+	import { blogService } from '$lib/services';
 
 	// Tea ceremony easing - matches blog page for consistency
 	// Custom easing function that starts slow and ends smoothly
@@ -15,16 +16,12 @@
 	let featuredPosts = $state<BlogPostMeta[]>([]);
 	let loading = $state(true);
 
-	// ✅ Load featured posts with top-level async (better than onMount)
+	// ✅ Load featured posts using service layer
 	async function loadFeaturedPosts() {
 		if (!browser) return;
 
 		try {
-			const response = await fetch('/api/blog?featured=true&limit=3');
-			if (response.ok) {
-				const data = await response.json();
-				featuredPosts = data || [];
-			}
+			featuredPosts = await blogService.getFeaturedPosts(3);
 		} catch (error) {
 			console.error('Failed to load featured posts:', error);
 		} finally {
@@ -37,20 +34,20 @@
 </script>
 
 <svelte:head>
-	<title>{config.site.name} - {config.personal.title}</title>
+	<title>Home - {config.site.name}</title>
 	<meta name="description" content={config.site.description} />
 </svelte:head>
 
 <!-- Hero Section -->
-<section class="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+<section class="relative flex min-h-[80vh] items-center justify-center overflow-hidden">
 	<!-- Subtle background pattern -->
-	<div class="absolute inset-0 pattern-seigaiha opacity-50"></div>
+	<div class="pattern-seigaiha absolute inset-0 opacity-50"></div>
 
-	<div class="container mx-auto px-4 relative z-10">
-		<div class="max-w-4xl mx-auto text-center">
+	<div class="relative z-10 container mx-auto px-4">
+		<div class="mx-auto max-w-4xl text-center">
 			<!-- Small badge - fade in -->
 			<div
-				class="inline-flex items-center gap-2 mb-8 badge-accent"
+				class="badge-accent mb-8 inline-flex items-center gap-2"
 				in:fade={{ duration: 350, delay: 0, easing: teaCeremonyEasing }}
 			>
 				<span>Portfolio & Blog</span>
@@ -58,7 +55,7 @@
 
 			<!-- Main heading - fade in -->
 			<h1
-				class="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight mb-6"
+				class="mb-6 text-5xl font-semibold tracking-tight md:text-7xl lg:text-8xl"
 				in:fade={{ duration: 400, delay: 100, easing: teaCeremonyEasing }}
 			>
 				{config.personal.name}
@@ -66,7 +63,7 @@
 
 			<!-- Subtitle - fade in -->
 			<p
-				class="text-xl md:text-2xl text-muted-foreground mb-4 max-w-2xl mx-auto"
+				class="mx-auto mb-4 max-w-2xl text-xl text-muted-foreground md:text-2xl"
 				in:fade={{ duration: 400, delay: 200, easing: teaCeremonyEasing }}
 			>
 				{config.personal.title}
@@ -74,13 +71,13 @@
 
 			<!-- Decorative divider - fade in -->
 			<div
-				class="divider-japanese max-w-xs mx-auto"
+				class="divider-japanese mx-auto max-w-xs"
 				in:fade={{ duration: 350, delay: 300, easing: teaCeremonyEasing }}
 			></div>
 
 			<!-- Bio text - fade in -->
 			<p
-				class="text-lg text-muted-foreground mt-8 max-w-2xl mx-auto leading-relaxed"
+				class="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground"
 				in:fade={{ duration: 400, delay: 350, easing: teaCeremonyEasing }}
 			>
 				{config.personal.bio}
@@ -88,21 +85,21 @@
 
 			<!-- CTA buttons - fly in with scale -->
 			<div
-				class="flex flex-wrap items-center justify-center gap-4 mt-12"
+				class="mt-12 flex flex-wrap items-center justify-center gap-4"
 				in:fly={{ y: 10, duration: 400, delay: 400, easing: teaCeremonyEasing }}
 			>
 				<a
 					href="/blog"
-					class="group inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5"
+					class="group inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-medium text-primary-foreground shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-lg"
 				>
 					<span>Read Blog</span>
-					<ArrowRightIcon size={20} class="group-hover:translate-x-1 transition-transform" />
+					<ArrowRightIcon size={20} class="transition-transform group-hover:translate-x-1" />
 				</a>
 				<a
 					href={config.social.github.url}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="inline-flex items-center gap-2 px-6 py-3 border border-border rounded-lg font-medium hover:bg-accent transition-all duration-300 hover:-translate-y-0.5"
+					class="inline-flex items-center gap-2 rounded-lg border border-border px-6 py-3 font-medium transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent"
 				>
 					<span>GitHub</span>
 				</a>
@@ -116,53 +113,53 @@
 		in:fade={{ duration: 600, delay: 600, easing: teaCeremonyEasing }}
 	>
 		<div class="scroll-indicator">
-			<div class="w-6 h-10 border-2 border-border rounded-full flex items-start justify-center p-2">
-				<div class="w-1 h-2 bg-primary rounded-full animate-bounce"></div>
+			<div class="flex h-10 w-6 items-start justify-center rounded-full border-2 border-border p-2">
+				<div class="h-2 w-1 animate-bounce rounded-full bg-primary"></div>
 			</div>
 		</div>
 	</div>
 </section>
 
 <!-- Featured Posts Section -->
-<section class="py-24 bg-muted/30">
+<section class="bg-muted/30 py-24">
 	<div class="container mx-auto px-4">
 		<!-- Section header - fly in -->
 		<div
-			class="max-w-4xl mx-auto mb-16"
+			class="mx-auto mb-16 max-w-4xl"
 			in:fly={{ y: 15, duration: 375, delay: 0, easing: teaCeremonyEasing }}
 		>
-			<div class="flex items-center gap-3 mb-4">
-				<div class="w-8 h-0.5 bg-primary"></div>
-				<span class="text-sm font-medium tracking-widest uppercase text-muted-foreground">Featured</span>
+			<div class="mb-4 flex items-center gap-3">
+				<div class="h-0.5 w-8 bg-primary"></div>
+				<span class="text-sm font-medium tracking-widest text-muted-foreground uppercase"
+					>Featured</span
+				>
 			</div>
-			<h2 class="text-4xl md:text-5xl font-semibold">
-				Latest Writing
-			</h2>
+			<h2 class="text-4xl font-semibold md:text-5xl">Latest Writing</h2>
 		</div>
 
 		<!-- Posts grid -->
 		{#if loading}
-			<div class="grid-japanese max-w-6xl mx-auto">
+			<div class="grid-japanese mx-auto max-w-6xl">
 				{#each Array(3) as _, index (index)}
 					<div
 						class="card-japanese"
-						in:fly={{ y: 10, duration: 375, delay: 100 + (index * 60), easing: teaCeremonyEasing }}
+						in:fly={{ y: 10, duration: 375, delay: 100 + index * 60, easing: teaCeremonyEasing }}
 					>
-						<div class="h-48 bg-muted/50 rounded mb-4 animate-pulse"></div>
-						<div class="h-6 bg-muted/50 rounded mb-2 animate-pulse"></div>
-						<div class="h-4 bg-muted/50 rounded w-3/4 animate-pulse"></div>
+						<div class="mb-4 h-48 animate-pulse rounded bg-muted/50"></div>
+						<div class="mb-2 h-6 animate-pulse rounded bg-muted/50"></div>
+						<div class="h-4 w-3/4 animate-pulse rounded bg-muted/50"></div>
 					</div>
 				{/each}
 			</div>
 		{:else if featuredPosts.length > 0}
-			<div class="grid-japanese max-w-6xl mx-auto">
-					{#each featuredPosts as post, index (post.slug)}
-						<BlogCard {post} {index} delay={100} stagger={60} variant="default" />
-					{/each}
+			<div class="grid-japanese mx-auto max-w-6xl">
+				{#each featuredPosts as post, index (post.slug)}
+					<BlogCard {post} {index} delay={100} stagger={60} variant="default" />
+				{/each}
 			</div>
 		{:else}
 			<div
-				class="text-center py-12"
+				class="py-12 text-center"
 				in:fade={{ duration: 400, delay: 100, easing: teaCeremonyEasing }}
 			>
 				<p class="text-muted-foreground">No featured posts yet. Check back soon!</p>
@@ -172,12 +169,12 @@
 		<!-- View all link -->
 		{#if featuredPosts.length > 0}
 			<div
-				class="text-center mt-12"
+				class="mt-12 text-center"
 				in:fly={{ y: 10, duration: 375, delay: 300, easing: teaCeremonyEasing }}
 			>
 				<a
 					href="/blog"
-					class="inline-flex items-center gap-2 text-sm font-medium text-primary hover:gap-3 transition-all"
+					class="inline-flex items-center gap-2 text-sm font-medium text-primary transition-all hover:gap-3"
 				>
 					<span>View all posts</span>
 					<ArrowRightIcon size={18} />
@@ -190,38 +187,36 @@
 <!-- About Section -->
 <section class="py-24">
 	<div class="container mx-auto px-4">
-		<div class="max-w-4xl mx-auto">
+		<div class="mx-auto max-w-4xl">
 			<div class="grid-japanese" style="grid-template-columns: 1fr;">
 				<!-- About card - fly in -->
 				<div
 					class="card-japanese"
 					in:fly={{ y: 15, duration: 375, delay: 0, easing: teaCeremonyEasing }}
 				>
-					<div class="flex items-start gap-4 mb-6">
+					<div class="mb-6 flex items-start gap-4">
 						<div
-							class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0"
+							class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10"
 						>
 							<UserIcon size={24} class="text-primary" />
 						</div>
 						<div>
-							<h3 class="text-2xl font-semibold mb-1">
-								About Me
-							</h3>
+							<h3 class="mb-1 text-2xl font-semibold">About Me</h3>
 							<p class="text-sm text-muted-foreground">{config.personal.location}</p>
 						</div>
 					</div>
 
-					<p class="text-muted-foreground leading-relaxed mb-6">
+					<p class="mb-6 leading-relaxed text-muted-foreground">
 						Hi, I'm {config.personal.name}. {config.personal.intro}
 					</p>
 
 					<div class="flex flex-wrap gap-3">
-						{#each Object.values(config.social) as social, index (social.label)}
+						{#each Object.values(config.social) as social (social.label)}
 							<a
 								href={social.url}
 								target="_blank"
 								rel="noopener noreferrer"
-								class="inline-flex items-center gap-2 px-4 py-2 border border-border rounded-lg text-sm hover:bg-accent hover:border-primary/30 transition-all hover:-translate-y-0.5"
+								class="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:bg-accent"
 							>
 								<span>{social.label}</span>
 							</a>

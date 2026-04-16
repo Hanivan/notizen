@@ -11,20 +11,14 @@
 		variant?: 'default' | 'featured';
 	}
 
-	let {
-		post,
-		index = 0,
-		delay = 100,
-		stagger = 60,
-		variant = 'default'
-	}: Props = $props();
+	let { post, index = 0, delay = 100, stagger = 60, variant = 'default' }: Props = $props();
 
 	// Tea ceremony easing
 	function teaCeremonyEasing(t: number): number {
 		return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 	}
 
-	let animationDelay = $derived(delay + (index * stagger));
+	let animationDelay = $derived(delay + index * stagger);
 	let titleSize = $derived(variant === 'featured' ? 'text-2xl' : 'text-xl');
 </script>
 
@@ -34,7 +28,7 @@
 >
 	<a href={`/blog/${post.slug}`} class="block">
 		<!-- Post meta -->
-		<div class="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+		<div class="mb-3 flex items-center gap-4 text-sm text-muted-foreground">
 			<span class="flex items-center gap-1">
 				<FolderIcon size={14} />
 				{post.category || 'General'}
@@ -50,18 +44,20 @@
 		</div>
 
 		<!-- Post title -->
-		<h3 class="blog-card-title {titleSize} font-semibold mb-3 group-hover:text-primary transition-colors leading-tight">
+		<h3
+			class="blog-card-title {titleSize} mb-3 leading-tight font-semibold transition-colors group-hover:text-primary"
+		>
 			{post.title}
 		</h3>
 
 		<!-- Post excerpt -->
-		<p class="text-muted-foreground line-clamp-2 mb-4 leading-relaxed">
+		<p class="mb-4 line-clamp-2 leading-relaxed text-muted-foreground">
 			{post.description || post.excerpt}
 		</p>
 
 		<!-- Tags -->
 		{#if post.tags && post.tags.length > 0}
-			<div class="flex flex-wrap gap-2 mb-4">
+			<div class="mb-4 flex flex-wrap gap-2">
 				{#each post.tags.slice(0, 3) as tag (tag)}
 					<span class="badge-accent text-xs">{tag}</span>
 				{/each}

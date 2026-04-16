@@ -8,11 +8,13 @@
 
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger
-		class="group relative inline-flex h-10 w-10 select-none items-center justify-center rounded-lg border border-border/50 text-foreground transition-all duration-300 hover:border-primary/50 hover:bg-accent hover:shadow-sm"
+		class="group relative inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border/50 text-foreground transition-all duration-300 select-none hover:border-primary/50 hover:bg-accent hover:shadow-sm"
 		aria-label="Toggle theme"
 	>
 		<!-- Vermilion accent glow on hover -->
-		<div class="absolute inset-0 rounded-lg bg-primary/0 opacity-0 transition-all duration-300 group-hover:bg-primary/5 group-hover:opacity-100"></div>
+		<div
+			class="absolute inset-0 rounded-lg bg-primary/0 opacity-0 transition-all duration-300 group-hover:bg-primary/5 group-hover:opacity-100"
+		></div>
 
 		<!-- Sun icon (visible in dark mode) -->
 		<SunIcon
@@ -27,77 +29,81 @@
 		/>
 
 		<!-- Subtle indicator dot -->
-		<div class="absolute bottom-1 right-1 h-1.5 w-1.5 rounded-full bg-primary/60 opacity-60"></div>
+		<div class="absolute right-1 bottom-1 h-1.5 w-1.5 rounded-full bg-primary/60 opacity-60"></div>
 
 		<span class="sr-only">Toggle theme</span>
 	</DropdownMenu.Trigger>
 
-	<DropdownMenu.Content
-		align="end"
-		class="min-w-[180px] z-1001 mt-4.5"
-	>
+	<DropdownMenu.Content align="end" class="z-1001 mt-4.5 min-w-[180px]">
 		<!-- Light mode option -->
 		<DropdownMenu.Item
 			onclick={() => setMode('light')}
-			class="group relative flex items-center gap-3 px-3 py-2.5 text-sm transition-all duration-200 hover:bg-accent rounded-md"
+			class="group relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-all duration-200 hover:bg-accent"
 		>
 			<!-- Icon container with subtle accent -->
-			<div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 group-hover:bg-primary/20 transition-colors">
-				<SunIcon weight="fill" class="text-primary h-4 w-4" />
+			<div
+				class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 transition-colors group-hover:bg-primary/20"
+			>
+				<SunIcon weight="fill" class="h-4 w-4 text-primary" />
 			</div>
 			<div class="flex-1">
 				<span class="font-medium">Light</span>
-				<p class="text-muted-foreground text-xs mt-0.5">Clean and bright</p>
+				<p class="mt-0.5 text-xs text-muted-foreground">Clean and bright</p>
 			</div>
 			<!-- Active indicator -->
-			<div class="h-2 w-2 rounded-full bg-primary/0 group-hover:bg-primary/40 transition-colors"></div>
+			<div
+				class="h-2 w-2 rounded-full bg-primary/0 transition-colors group-hover:bg-primary/40"
+			></div>
 		</DropdownMenu.Item>
 
 		<!-- Dark mode option -->
 		<DropdownMenu.Item
 			onclick={() => setMode('dark')}
-			class="group relative flex items-center gap-3 px-3 py-2.5 text-sm transition-all duration-200 hover:bg-accent rounded-md"
+			class="group relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-all duration-200 hover:bg-accent"
 		>
 			<!-- Icon container with subtle accent -->
-			<div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 group-hover:bg-primary/20 transition-colors">
-				<MoonIcon weight="fill" class="text-primary h-4 w-4" />
+			<div
+				class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 transition-colors group-hover:bg-primary/20"
+			>
+				<MoonIcon weight="fill" class="h-4 w-4 text-primary" />
 			</div>
 			<div class="flex-1">
 				<span class="font-medium">Dark</span>
-				<p class="text-muted-foreground text-xs mt-0.5">Easy on the eyes</p>
+				<p class="mt-0.5 text-xs text-muted-foreground">Easy on the eyes</p>
 			</div>
 			<!-- Active indicator -->
-			<div class="h-2 w-2 rounded-full bg-primary/0 group-hover:bg-primary/40 transition-colors"></div>
+			<div
+				class="h-2 w-2 rounded-full bg-primary/0 transition-colors group-hover:bg-primary/40"
+			></div>
 		</DropdownMenu.Item>
 
 		<!-- System mode option -->
 		<DropdownMenu.Item
 			onclick={() => resetMode()}
-			class="group relative flex items-center gap-3 px-3 py-2.5 text-sm transition-all duration-200 hover:bg-accent rounded-md"
+			class="group relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-all duration-200 hover:bg-accent"
 		>
 			<!-- Icon container with subtle accent -->
-			<div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 group-hover:bg-primary/20 transition-colors">
-				<MonitorIcon weight="fill" class="text-primary h-4 w-4" />
+			<div
+				class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 transition-colors group-hover:bg-primary/20"
+			>
+				<MonitorIcon weight="fill" class="h-4 w-4 text-primary" />
 			</div>
 			<div class="flex-1">
 				<span class="font-medium">System</span>
-				<p class="text-muted-foreground text-xs mt-0.5">Follow your device</p>
+				<p class="mt-0.5 text-xs text-muted-foreground">Follow your device</p>
 			</div>
 			<!-- Active indicator -->
-			<div class="h-2 w-2 rounded-full bg-primary/0 group-hover:bg-primary/40 transition-colors"></div>
+			<div
+				class="h-2 w-2 rounded-full bg-primary/0 transition-colors group-hover:bg-primary/40"
+			></div>
 		</DropdownMenu.Item>
 
 		<!-- Decorative divider -->
 		<div class="mx-3 my-1 h-px bg-border/60"></div>
 
 		<!-- Footer note -->
-		<div
-			class="px-3 py-2 text-center"
-			in:fade={{ duration: 300, easing: quintOut }}
-		>
-			<p class="text-muted-foreground text-xs">
-				Theme preference saved
-			</p>
+		<div class="px-3 py-2 text-center" in:fade={{ duration: 300, easing: quintOut }}>
+			<p class="text-xs text-muted-foreground">Theme preference saved</p>
 		</div>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

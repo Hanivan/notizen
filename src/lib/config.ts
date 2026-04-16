@@ -1,4 +1,10 @@
-import type { Twitter } from "svelte-meta-tags";
+import type { Twitter } from 'svelte-meta-tags';
+
+// Navigation item type
+type NavigationItem = {
+	label: string;
+	href: string;
+};
 
 // Site configuration - centralized static data
 export const config = {
@@ -8,11 +14,13 @@ export const config = {
 		shortname: 'Hanivan Rizky S',
 		initials: 'HRS',
 		title: 'Development Blog',
-		email: 'hello@hanivan.my.id',
+		email: 'hanivan20@gmail.com',
 		location: 'Indonesia',
 		bio: 'Fullstack Web Developer with a strong passion for backend development. Sharing thoughts, tutorials, and insights about software architecture, APIs, databases, and web development.',
-		profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop',
-			intro: "I'm a developer passionate about building elegant solutions to complex problems. This blog is where I share my thoughts, tutorials, and insights about software development, design patterns, and technology."
+		profileImage:
+			'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop',
+		intro:
+			"I'm a developer passionate about building elegant solutions to complex problems. This blog is where I share my thoughts, tutorials, and insights about software development, design patterns, and technology."
 	},
 
 	// Site Information
@@ -20,7 +28,8 @@ export const config = {
 		name: 'Notizen',
 		url: 'https://hanivan.my.id',
 		tagline: 'Thoughts, tutorials, and insights about development',
-		description: 'Notizen - A development blog sharing thoughts, tutorials, and insights about software development, design patterns, and technology.',
+		description:
+			'Notizen - A development blog sharing thoughts, tutorials, and insights about software development, design patterns, and technology.',
 		keywords: ['development', 'programming', 'web development', 'tutorials', 'blog', 'portfolio'],
 		author: 'Hanivan Rizky Sobari',
 		twitterHandle: '@hanivanrizky_'
@@ -31,11 +40,13 @@ export const config = {
 		main: [
 			{ label: 'Home', href: '/' },
 			{ label: 'Blog', href: '/blog' }
-		],
-		secondary: [
-			{ label: 'About', href: '/about' },
-			{ label: 'Contact', href: '/contact' }
-		]
+		] as NavigationItem[],
+		secondary: [] as NavigationItem[]
+		// Uncomment when pages are ready:
+		// [
+		// 	{ label: 'About', href: '/about' },
+		// 	{ label: 'Contact', href: '/contact' }
+		// ]
 	},
 
 	// Social Media Links
@@ -45,20 +56,34 @@ export const config = {
 			icon: 'Instagram',
 			label: 'Instagram'
 		},
-		github: {
-			url: 'https://github.com/Hanivan',
-			icon: 'GitHub',
-			label: 'GitHub'
-		},
 		twitter: {
 			url: 'https://x.com/hanivanrizky_',
 			icon: 'X',
 			label: 'X (Twitter)'
 		},
+		github: {
+			url: 'https://github.com/Hanivan',
+			icon: 'GitHub',
+			label: 'GitHub'
+		},
 		email: {
-			url: 'mailto:hello@hanivan.my.id',
+			url: 'mailto:hanivan20@gmail.com',
 			icon: 'Envelope',
 			label: 'Email'
+		}
+	},
+
+	// Other Projects
+	otherProjects: {
+		linkeun: {
+			url: 'https://www.linkeun.com',
+			label: 'Linkeun Mono',
+			description: 'Professional portfolio and business website'
+		},
+		notneet: {
+			url: 'https://www.notneet.my.id',
+			label: 'NotNeet',
+			description: 'Personal blog and projects showcase'
 		}
 	},
 

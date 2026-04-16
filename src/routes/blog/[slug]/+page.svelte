@@ -4,16 +4,13 @@
 		formatDate,
 		generatePostEmoji,
 		getRelatedPosts,
-		loadBlogPost,
-		loadBlogPosts,
 		type BlogPost,
 		type BlogPostMeta
 	} from '$lib/utils/blog';
 	import { ClockIcon, UserIcon, ArrowLeftIcon, ShareIcon, CalendarIcon } from 'phosphor-svelte';
-	import { fade, fly, blur } from 'svelte/transition';
-	import { flip } from 'svelte/animate';
-	import { quintOut } from 'svelte/easing';
+	import { fade } from 'svelte/transition';
 	import BlogCard from '$lib/components/BlogCard.svelte';
+	import { blogService } from '$lib/services';
 
 	let post = $state<BlogPost | null>(null);
 	let relatedPosts = $state<BlogPostMeta[]>([]);
@@ -22,7 +19,7 @@
 	let imageError = $state(false);
 	let imageLoaded = $state(false);
 
-	// ✅ GOOD: Use top-level async instead of onMount
+	// ✅ Load blog post using service layer
 	async function loadData() {
 		loading = true;
 		error = false;
@@ -35,18 +32,15 @@
 			}
 
 			// Load the current post
-			post = await loadBlogPost(slug);
+			post = await blogService.getPost(slug);
 
 			if (!post) {
 				error = true;
 				return;
 			}
 
-			// Load related posts using API filter for efficiency
-			const relatedPostsData = await loadBlogPosts({
-				category: post.category,
-				limit: 4 // Get 4 to exclude current post and get 3 related
-			});
+			// Load related posts using service layer
+			const relatedPostsData = await blogService.getPostsByCategory(post.category, 4);
 			relatedPosts = relatedPostsData.filter((p) => p.slug !== post!.slug).slice(0, 3);
 		} catch (err) {
 			console.error('Error loading blog post:', err);
@@ -170,8 +164,8 @@
 		<section class="py-32">
 			<div class="container mx-auto px-4">
 				<div class="flex flex-col items-center justify-center py-16">
-					<div class="border-primary h-16 w-16 animate-spin rounded-full border-b-2"></div>
-					<p class="mt-4 text-muted-foreground text-sm">Loading article...</p>
+					<div class="h-16 w-16 animate-spin rounded-full border-b-2 border-primary"></div>
+					<p class="mt-4 text-sm text-muted-foreground">Loading article...</p>
 				</div>
 			</div>
 		</section>
@@ -180,23 +174,21 @@
 		<section class="py-32">
 			<div class="container mx-auto px-4">
 				<div class="mx-auto max-w-3xl py-20 text-center">
-					<div class="text-muted-foreground/30 mb-8 text-8xl">📄</div>
-					<h1 class="mb-6 text-4xl font-semibold">
-						Post not found
-					</h1>
-					<p class="text-muted-foreground mb-10 text-lg leading-relaxed">
+					<div class="mb-8 text-8xl text-muted-foreground/30">📄</div>
+					<h1 class="mb-6 text-4xl font-semibold">Post not found</h1>
+					<p class="mb-10 text-lg leading-relaxed text-muted-foreground">
 						The blog post you're looking for doesn't exist or has been removed.
 					</p>
 					<div class="flex justify-center gap-4">
 						<a
 							href="/blog"
-							class="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 font-medium rounded-lg transition-all duration-300 shadow-md"
+							class="rounded-lg bg-primary px-8 py-4 font-medium text-primary-foreground shadow-md transition-all duration-300 hover:bg-primary/90"
 						>
 							Browse All Posts
 						</a>
 						<a
 							href="/"
-							class="border-border hover:border-primary/30 hover:bg-accent border px-8 py-4 font-medium rounded-lg transition-all duration-300"
+							class="rounded-lg border border-border px-8 py-4 font-medium transition-all duration-300 hover:border-primary/30 hover:bg-accent"
 						>
 							Home
 						</a>
@@ -208,17 +200,21 @@
 		<!-- Blog Post Content -->
 		<article>
 			<!-- Post Header -->
-			<section class="relative overflow-hidden in:fade={{ duration: 600 }} border-b border-border/40 bg-background/50 py-20 sm:py-32">
-				<div class="absolute inset-0 pattern-seigaiha opacity-20"></div>
+			<section
+				class="relative overflow-hidden in:fade={{
+					duration: 600
+				}} border-b border-border/40 bg-background/50 py-20 sm:py-32"
+			>
+				<div class="pattern-seigaiha absolute inset-0 opacity-20"></div>
 
-				<div class="container mx-auto px-4 relative z-10">
+				<div class="relative z-10 container mx-auto px-4">
 					<div class="mx-auto max-w-4xl">
 						<!-- Back button -->
 						<a
 							href="/blog"
-							class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary mb-8 transition-colors group"
+							class="group mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
 						>
-							<ArrowLeftIcon size={18} class="group-hover:-translate-x-1 transition-transform" />
+							<ArrowLeftIcon size={18} class="transition-transform group-hover:-translate-x-1" />
 							<span>Back to articles</span>
 						</a>
 
@@ -230,12 +226,12 @@
 						</div>
 
 						<!-- Post Title -->
-						<h1 class="mb-6 text-4xl font-semibold leading-tight sm:text-5xl md:text-6xl">
+						<h1 class="mb-6 text-4xl leading-tight font-semibold sm:text-5xl md:text-6xl">
 							{post.title}
 						</h1>
 
 						<!-- Post Description -->
-						<p class="text-muted-foreground mb-8 text-xl leading-relaxed">
+						<p class="mb-8 text-xl leading-relaxed text-muted-foreground">
 							{post.description}
 						</p>
 
@@ -264,7 +260,7 @@
 								{#each post.tags as tag}
 									<a
 										href="/blog?tag={encodeURIComponent(tag.toLowerCase())}"
-										class="px-3 py-1.5 text-xs font-medium border border-border rounded-md hover:border-primary/50 hover:bg-accent transition-all"
+										class="rounded-md border border-border px-3 py-1.5 text-xs font-medium transition-all hover:border-primary/50 hover:bg-accent"
 									>
 										#{tag}
 									</a>
@@ -277,10 +273,10 @@
 
 			<!-- Featured Image or Emoji Fallback -->
 			{#if showImage || !showImage}
-				<div class="border-b border-border/40 py-12 bg-muted/20">
+				<div class="border-b border-border/40 bg-muted/20 py-12">
 					<div class="container mx-auto px-4">
 						<div class="mx-auto max-w-5xl">
-							<div class="overflow-hidden rounded-lg shadow-japanese-lg">
+							<div class="shadow-japanese-lg overflow-hidden rounded-lg">
 								{#if showImage}
 									<img
 										src={post.image}
@@ -296,13 +292,17 @@
 									{/if}
 								{:else}
 									<!-- Emoji Fallback with Japanese minimalism -->
-									<div class="flex aspect-video w-full items-center justify-center bg-linear-to-br from-muted/40 to-muted">
+									<div
+										class="flex aspect-video w-full items-center justify-center bg-linear-to-br from-muted/40 to-muted"
+									>
 										<div class="text-center">
 											<div class="mb-4 text-8xl sm:text-9xl">{postEmoji}</div>
-											<div class="text-muted-foreground text-base font-semibold uppercase tracking-wider sm:text-lg">
+											<div
+												class="text-base font-semibold tracking-wider text-muted-foreground uppercase sm:text-lg"
+											>
 												{safePost.category}
 											</div>
-											<div class="text-muted-foreground/70 text-sm mt-2 max-w-md mx-auto">
+											<div class="mx-auto mt-2 max-w-md text-sm text-muted-foreground/70">
 												{safePost.title}
 											</div>
 										</div>
@@ -319,21 +319,21 @@
 				<div class="container mx-auto px-4">
 					<div class="mx-auto max-w-4xl">
 						<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-							<span class="text-muted-foreground text-sm font-medium uppercase tracking-wider">
+							<span class="text-sm font-medium tracking-wider text-muted-foreground uppercase">
 								Share this article
 							</span>
 							<div class="flex flex-wrap gap-3">
 								<button
 									onclick={sharePost}
 									disabled={isSharing}
-									class="inline-flex items-center gap-2 border-border hover:border-primary/30 hover:bg-accent border px-6 py-2.5 text-sm font-medium rounded-lg transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-70"
+									class="inline-flex items-center gap-2 rounded-lg border border-border px-6 py-2.5 text-sm font-medium transition-all duration-300 hover:border-primary/30 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-70"
 								>
 									<ShareIcon size={18} weight="thin" />
 									<span>{shareButtonText}</span>
 								</button>
 								<a
 									href="/blog?category={encodeURIComponent(post.category.toLowerCase())}"
-									class="inline-flex items-center gap-2 border-border hover:border-primary/30 hover:bg-accent border px-6 py-2.5 text-sm font-medium rounded-lg transition-all duration-300"
+									class="inline-flex items-center gap-2 rounded-lg border border-border px-6 py-2.5 text-sm font-medium transition-all duration-300 hover:border-primary/30 hover:bg-accent"
 								>
 									<span>More in {post.category}</span>
 								</a>
@@ -366,24 +366,24 @@
 								>
 									<span class="text-4xl">👨‍💻</span>
 								</div>
-								<div class="text-center sm:text-left flex-1">
+								<div class="flex-1 text-center sm:text-left">
 									<h3 class="mb-3 text-2xl font-semibold">
 										{post.author}
 									</h3>
-									<p class="text-muted-foreground mb-6 text-base leading-relaxed">
+									<p class="mb-6 text-base leading-relaxed text-muted-foreground">
 										Developer and writer passionate about development and creating user-friendly
 										applications. Sharing thoughts, tutorials, and insights about technology.
 									</p>
 									<div class="flex flex-col gap-3 sm:flex-row">
 										<a
 											href={config.social.email.url}
-											class="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 text-sm font-medium rounded-lg transition-all duration-300 shadow-md inline-flex items-center justify-center"
+											class="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-md transition-all duration-300 hover:bg-primary/90"
 										>
 											Get in Touch
 										</a>
 										<a
 											href="/blog"
-											class="border-border hover:border-primary/30 hover:bg-accent border px-6 py-3 text-sm font-medium rounded-lg transition-all duration-300 inline-flex items-center justify-center"
+											class="inline-flex items-center justify-center rounded-lg border border-border px-6 py-3 text-sm font-medium transition-all duration-300 hover:border-primary/30 hover:bg-accent"
 										>
 											More Posts
 										</a>
@@ -396,15 +396,15 @@
 						<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 							<a
 								href="/blog"
-								class="inline-flex items-center gap-2 border-border hover:border-primary/30 hover:bg-accent border px-6 py-3 text-sm font-medium rounded-lg transition-all duration-300 group"
+								class="group inline-flex items-center gap-2 rounded-lg border border-border px-6 py-3 text-sm font-medium transition-all duration-300 hover:border-primary/30 hover:bg-accent"
 							>
-								<ArrowLeftIcon size={18} class="group-hover:-translate-x-1 transition-transform" />
+								<ArrowLeftIcon size={18} class="transition-transform group-hover:-translate-x-1" />
 								<span>All Articles</span>
 							</a>
 							<button
 								onclick={sharePost}
 								disabled={isSharing}
-								class="inline-flex items-center gap-2 border-border hover:border-primary/30 hover:bg-accent border px-6 py-3 text-sm font-medium rounded-lg transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-70"
+								class="inline-flex items-center gap-2 rounded-lg border border-border px-6 py-3 text-sm font-medium transition-all duration-300 hover:border-primary/30 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-70"
 							>
 								<ShareIcon size={18} weight="thin" />
 								<span>{shareButtonText}</span>
@@ -422,23 +422,23 @@
 					<div class="mx-auto max-w-6xl">
 						<!-- Section header -->
 						<div class="mb-12">
-							<div class="flex items-center gap-3 mb-2">
-								<div class="w-8 h-0.5 bg-primary"></div>
-								<span class="text-sm font-medium tracking-widest uppercase text-muted-foreground">Related</span>
+							<div class="mb-2 flex items-center gap-3">
+								<div class="h-0.5 w-8 bg-primary"></div>
+								<span class="text-sm font-medium tracking-widest text-muted-foreground uppercase"
+									>Related</span
+								>
 							</div>
-							<h2 class="text-3xl font-semibold">
-								You might also like
-							</h2>
+							<h2 class="text-3xl font-semibold">You might also like</h2>
 						</div>
 
-							<!-- Related posts grid -->
-							<div class="grid-japanese">
+						<!-- Related posts grid -->
+						<div class="grid-japanese">
 							{#each relatedPosts as relatedPost, index (relatedPost.slug)}
 								<BlogCard post={relatedPost} {index} delay={0} stagger={100} variant="default" />
 							{/each}
-							</div>
 						</div>
 					</div>
+				</div>
 			</section>
 		{/if}
 	{/if}

@@ -11,16 +11,16 @@
 				<h3 class="text-2xl font-semibold">
 					{config.site.name}
 				</h3>
-				<p class="text-muted-foreground text-sm leading-relaxed">
+				<p class="text-sm leading-relaxed text-muted-foreground">
 					{config.site.tagline}
 				</p>
 				<!-- Decorative accent -->
-				<div class="w-12 h-0.5 bg-primary"></div>
+				<div class="h-0.5 w-12 bg-primary"></div>
 			</div>
 
 			<!-- Navigation -->
 			<div class="space-y-4">
-				<h3 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+				<h3 class="text-sm font-semibold tracking-wider text-muted-foreground uppercase">
 					Navigation
 				</h3>
 				<ul class="space-y-3">
@@ -28,30 +28,32 @@
 						<li>
 							<a
 								href={item.href}
-								class="text-muted-foreground hover:text-primary text-sm transition-all duration-300 inline-flex items-center gap-2 group"
+								class="group inline-flex items-center gap-2 text-sm text-muted-foreground transition-all duration-300 hover:text-primary"
 							>
-								<span class="group-hover:translate-x-1 transition-transform">→</span>
+								<span class="transition-transform group-hover:translate-x-1">→</span>
 								<span>{item.label}</span>
 							</a>
 						</li>
 					{/each}
-					{#each config.navigation.secondary as item (item.href)}
-						<li>
-							<a
-								href={item.href}
-								class="text-muted-foreground hover:text-primary text-sm transition-all duration-300 inline-flex items-center gap-2 group"
-							>
-								<span class="group-hover:translate-x-1 transition-transform">→</span>
-								<span>{item.label}</span>
-							</a>
-						</li>
-					{/each}
+					{#if config.navigation.secondary && config.navigation.secondary.length > 0}
+						{#each config.navigation.secondary as item (item.href)}
+							<li>
+								<a
+									href={item.href}
+									class="group inline-flex items-center gap-2 text-sm text-muted-foreground transition-all duration-300 hover:text-primary"
+								>
+									<span class="transition-transform group-hover:translate-x-1">→</span>
+									<span>{item.label}</span>
+								</a>
+							</li>
+						{/each}
+					{/if}
 				</ul>
 			</div>
 
 			<!-- Social Links -->
 			<div class="space-y-4">
-				<h3 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+				<h3 class="text-sm font-semibold tracking-wider text-muted-foreground uppercase">
 					Connect
 				</h3>
 				<div class="flex gap-3">
@@ -60,7 +62,7 @@
 							href={social.url}
 							target="_blank"
 							rel="noopener noreferrer"
-							class="text-muted-foreground hover:text-primary hover:bg-accent w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 border border-transparent hover:border-border/50"
+							class="flex h-10 w-10 items-center justify-center rounded-lg border border-transparent text-muted-foreground transition-all duration-300 hover:border-border/50 hover:bg-accent hover:text-primary"
 							aria-label={social.label}
 						>
 							{#if social.label === 'GitHub'}
@@ -77,45 +79,40 @@
 				</div>
 			</div>
 
-			<!-- Legal -->
+			<!-- Other Projects -->
 			<div class="space-y-4">
-				<h3 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-					Legal
+				<h3 class="text-sm font-semibold tracking-wider text-muted-foreground uppercase">
+					More Projects
 				</h3>
 				<ul class="space-y-3">
-					<li>
-						<a
-							href="/privacy"
-							class="text-muted-foreground hover:text-primary text-sm transition-all duration-300 inline-flex items-center gap-2 group"
-						>
-							<span class="group-hover:translate-x-1 transition-transform">→</span>
-							<span>Privacy Policy</span>
-						</a>
-					</li>
-					<li>
-						<a
-							href="/terms"
-							class="text-muted-foreground hover:text-primary text-sm transition-all duration-300 inline-flex items-center gap-2 group"
-						>
-							<span class="group-hover:translate-x-1 transition-transform">→</span>
-							<span>Terms of Service</span>
-						</a>
-					</li>
+					{#each Object.values(config.otherProjects) as project (project.label)}
+						<li>
+							<a
+								href={project.url}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="group inline-flex items-center gap-2 text-sm text-muted-foreground transition-all duration-300 hover:text-primary"
+							>
+								<span class="transition-transform group-hover:translate-x-1">→</span>
+								<span>{project.label}</span>
+							</a>
+						</li>
+					{/each}
 				</ul>
 			</div>
 		</div>
 
 		<!-- Bottom Bar -->
 		<div class="mt-16 border-t border-border/60 pt-8">
-			<div class="flex flex-col md:flex-row items-center justify-between gap-4">
-				<p class="text-muted-foreground text-sm">
+			<div class="flex flex-col items-center justify-between gap-4 md:flex-row">
+				<p class="text-sm text-muted-foreground">
 					{config.business.copyright}
 				</p>
 				<!-- Decorative elements -->
 				<div class="flex items-center gap-2">
-					<div class="w-2 h-2 rounded-full bg-primary/60"></div>
-					<div class="w-2 h-2 rounded-full bg-primary/40"></div>
-					<div class="w-2 h-2 rounded-full bg-primary/20"></div>
+					<div class="h-2 w-2 rounded-full bg-primary/60"></div>
+					<div class="h-2 w-2 rounded-full bg-primary/40"></div>
+					<div class="h-2 w-2 rounded-full bg-primary/20"></div>
 				</div>
 			</div>
 		</div>

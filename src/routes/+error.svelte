@@ -140,13 +140,13 @@
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
-<main class="min-h-screen relative overflow-hidden flex items-center justify-center">
+<main class="relative flex min-h-screen items-center justify-center overflow-hidden">
 	<!-- Background layers -->
-	<div class="absolute inset-0 pattern-seigaiha opacity-[0.03]"></div>
+	<div class="pattern-seigaiha absolute inset-0 opacity-[0.03]"></div>
 	<div class="absolute inset-0 bg-linear-to-b from-background via-background to-muted/20"></div>
 
 	<!-- Floating decorative circles -->
-	<div class="absolute inset-0 pointer-events-none overflow-hidden">
+	<div class="pointer-events-none absolute inset-0 overflow-hidden">
 		<div
 			class="float-circle float-circle-1"
 			style="transform: translateY({floatY * 0.5}px) rotate({rotateY * 0.3}deg)"
@@ -158,12 +158,12 @@
 	</div>
 
 	<!-- Content -->
-	<div class="container mx-auto px-4 relative z-10">
-		<div class="max-w-4xl mx-auto text-center">
+	<div class="relative z-10 container mx-auto px-4">
+		<div class="mx-auto max-w-4xl text-center">
 			<!-- Error Code Number -->
-			<div class="relative mb-8 error-code-wrapper" style="transform: translateY({floatY}px)">
+			<div class="error-code-wrapper relative mb-8" style="transform: translateY({floatY}px)">
 				<h1
-					class="text-[12rem] md:text-[16rem] lg:text-[20rem] font-semibold leading-none tracking-tighter"
+					class="text-[12rem] leading-none font-semibold tracking-tighter md:text-[16rem] lg:text-[20rem]"
 					in:fly={{ y: -30, opacity: 0, duration: 600, easing: quintOut }}
 				>
 					{statusCode}
@@ -171,21 +171,21 @@
 
 				<!-- Decorative elements around error code -->
 				<div
-					class="absolute top-0 left-0 w-16 h-16 border-l-2 border-t-2 border-primary/30"
+					class="absolute top-0 left-0 h-16 w-16 border-t-2 border-l-2 border-primary/30"
 					in:scale={{ start: 0.8, opacity: 0, duration: 400, delay: 200, easing: quintOut }}
 				></div>
 				<div
-					class="absolute bottom-0 right-0 w-16 h-16 border-r-2 border-b-2 border-primary/30"
+					class="absolute right-0 bottom-0 h-16 w-16 border-r-2 border-b-2 border-primary/30"
 					in:scale={{ start: 0.8, opacity: 0, duration: 400, delay: 300, easing: quintOut }}
 				></div>
 
 				<!-- Small Japanese accent -->
 				<div
-					class="absolute top-1/2 right-0 -translate-y-1/2 translate-x-full ml-8"
+					class="absolute top-1/2 right-0 ml-8 translate-x-full -translate-y-1/2"
 					in:blur={{ amount: 8, opacity: 0, duration: 500, delay: 400, easing: quintOut }}
 				>
-					<div class="text-6xl md:text-8xl opacity-20">{japaneseText.text}</div>
-					<div class="text-xs text-muted-foreground mt-2">{japaneseText.meaning}</div>
+					<div class="text-6xl opacity-20 md:text-8xl">{japaneseText.text}</div>
+					<div class="mt-2 text-xs text-muted-foreground">{japaneseText.meaning}</div>
 				</div>
 			</div>
 
@@ -199,101 +199,98 @@
 						{badgeText}
 					</span>
 				</div>
-				<h2 class="zen-message text-2xl md:text-3xl lg:text-4xl font-medium mb-6 leading-relaxed">
+				<h2 class="zen-message mb-6 text-2xl leading-relaxed font-medium md:text-3xl lg:text-4xl">
 					{zenMessages}
 				</h2>
-				<p class="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+				<p class="mx-auto max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
 					{errorMessage}
 				</p>
 			</div>
 
 			<!-- Decorative divider -->
 			<div
-				class="divider-japanese max-w-xs mx-auto my-12"
+				class="divider-japanese mx-auto my-12 max-w-xs"
 				in:fly={{ x: -10, opacity: 0, duration: 400, delay: 350, easing: quintOut }}
 			></div>
 
 			<!-- Action buttons -->
 			<div
-				class="flex flex-col sm:flex-row items-center justify-center gap-4"
+				class="flex flex-col items-center justify-center gap-4 sm:flex-row"
 				in:fade={{ duration: 400, delay: 500, easing: quintOut }}
 			>
 				<a
 					href="/"
-					class="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-all duration-300 shadow-japanese"
+					class="group shadow-japanese inline-flex w-full items-center justify-center gap-3 rounded-lg bg-primary px-8 py-4 font-medium text-primary-foreground transition-all duration-300 hover:bg-primary/90 sm:w-auto"
 				>
 					<HouseIcon size={20} weight="thin" />
 					<span>Go Home</span>
 					<ArrowLeftIcon
 						size={18}
 						weight="bold"
-						class="group-hover:translate-x-1 group-hover:rotate-180 transition-transform"
+						class="transition-transform group-hover:translate-x-1 group-hover:rotate-180"
 					/>
 				</a>
 
 				<a
 					href="/blog"
-					class="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 border border-border rounded-lg font-medium hover:bg-accent hover:border-primary/30 transition-all duration-300"
+					class="group inline-flex w-full items-center justify-center gap-3 rounded-lg border border-border px-8 py-4 font-medium transition-all duration-300 hover:border-primary/30 hover:bg-accent sm:w-auto"
 				>
 					<NewspaperIcon size={20} weight="thin" />
 					<span>Read Blog</span>
-					<ArrowLeftIcon
-						size={18}
-						class="group-hover:translate-x-1 transition-transform"
-					/>
+					<ArrowLeftIcon size={18} class="transition-transform group-hover:translate-x-1" />
 				</a>
 			</div>
 
 			<!-- Helpful suggestions -->
 			<div
-				class="mt-16 p-8 border border-border/40 rounded-lg bg-muted/20 max-w-2xl mx-auto"
+				class="mx-auto mt-16 max-w-2xl rounded-lg border border-border/40 bg-muted/20 p-8"
 				in:fly={{ y: 15, opacity: 0, duration: 500, delay: 650, easing: quintOut }}
 			>
-				<h3 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-6">
+				<h3 class="mb-6 text-sm font-semibold tracking-wider text-muted-foreground uppercase">
 					You might be looking for
 				</h3>
 				<div class="space-y-3">
 					<a
 						href="/blog"
-						class="group flex items-center gap-3 p-4 rounded-lg hover:bg-accent transition-all duration-300 border border-transparent hover:border-border/50"
+						class="group flex items-center gap-3 rounded-lg border border-transparent p-4 transition-all duration-300 hover:border-border/50 hover:bg-accent"
 						in:fly={{ x: -10, opacity: 0, duration: 350, delay: 750, easing: quintOut }}
 					>
 						<div
-							class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors shrink-0"
+							class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground"
 						>
 							<NewspaperIcon size={20} weight="thin" />
 						</div>
 						<div class="flex-1">
-							<div class="font-medium group-hover:text-primary transition-colors mb-1">
+							<div class="mb-1 font-medium transition-colors group-hover:text-primary">
 								Blog Articles
 							</div>
 							<div class="text-xs text-muted-foreground">Latest tutorials and insights</div>
 						</div>
 						<ArrowLeftIcon
 							size={16}
-							class="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all opacity-0 group-hover:opacity-100"
+							class="text-muted-foreground opacity-0 transition-all group-hover:translate-x-1 group-hover:text-primary group-hover:opacity-100"
 						/>
 					</a>
 
 					<a
 						href="/"
-						class="group flex items-center gap-3 p-4 rounded-lg hover:bg-accent transition-all duration-300 border border-transparent hover:border-border/50"
+						class="group flex items-center gap-3 rounded-lg border border-transparent p-4 transition-all duration-300 hover:border-border/50 hover:bg-accent"
 						in:fly={{ x: -10, opacity: 0, duration: 350, delay: 800, easing: quintOut }}
 					>
 						<div
-							class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors shrink-0"
+							class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground"
 						>
 							<HouseIcon size={20} weight="thin" />
 						</div>
 						<div class="flex-1">
-							<div class="font-medium group-hover:text-primary transition-colors mb-1">
+							<div class="mb-1 font-medium transition-colors group-hover:text-primary">
 								Homepage
 							</div>
 							<div class="text-xs text-muted-foreground">Start from the beginning</div>
 						</div>
 						<ArrowLeftIcon
 							size={16}
-							class="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all opacity-0 group-hover:opacity-100"
+							class="text-muted-foreground opacity-0 transition-all group-hover:translate-x-1 group-hover:text-primary group-hover:opacity-100"
 						/>
 					</a>
 				</div>
@@ -301,7 +298,7 @@
 
 			<!-- Zen quote -->
 			<div
-				class="mt-12 mb-4 text-muted-foreground/60 text-sm italic"
+				class="mt-12 mb-4 text-sm text-muted-foreground/60 italic"
 				in:fade={{ duration: 600, delay: 1000, easing: quintOut }}
 			>
 				"七転び八起き" - Fall seven times, stand up eight

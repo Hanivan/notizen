@@ -6,15 +6,13 @@
 		getFeaturedPosts,
 		getUniqueCategories,
 		getUniqueTags,
-		loadBlogPosts,
 		searchPosts,
 		type BlogPostMeta
 	} from '$lib/utils/blog';
 	import { MagnifyingGlassIcon, TagIcon, FolderIcon, XIcon } from 'phosphor-svelte';
 	import { fade, fly } from 'svelte/transition';
-	import { flip } from 'svelte/animate';
-	import { quintOut } from 'svelte/easing';
 	import BlogCard from '$lib/components/BlogCard.svelte';
+	import { blogService } from '$lib/services';
 
 	// Tea ceremony easing - starts slow, deliberate motion, smooth finish
 	// Custom cubic bezier implementation for smooth, intentional animations
@@ -40,7 +38,7 @@
 	let filteredPosts = $derived(applyFilters());
 	let displayTags = $derived(tags.slice(0, 12));
 
-	// ✅ GOOD: Use top-level async instead of onMount
+	// ✅ Load blog posts using service layer
 	async function loadData() {
 		loading = true;
 		try {
@@ -54,7 +52,7 @@
 			if (tagParam) selectedTag = tagParam;
 			if (searchParam) searchQuery = searchParam;
 
-			posts = await loadBlogPosts();
+			posts = await blogService.getPosts();
 			categories = getUniqueCategories(posts);
 			tags = getUniqueTags(posts);
 		} catch (error) {
@@ -100,13 +98,13 @@
 
 <!-- Hero Section -->
 <section class="relative overflow-hidden border-b border-border/40 bg-background/50 py-20 sm:py-32">
-	<div class="absolute inset-0 pattern-seigaiha opacity-30"></div>
+	<div class="pattern-seigaiha absolute inset-0 opacity-30"></div>
 
-	<div class="container mx-auto px-4 relative z-10">
+	<div class="relative z-10 container mx-auto px-4">
 		<div class="mx-auto max-w-4xl text-center">
 			<!-- Badge -->
 			<div
-				class="inline-flex items-center gap-2 mb-6 badge-accent"
+				class="badge-accent mb-6 inline-flex items-center gap-2"
 				in:fade={{ duration: 350, delay: 0, easing: teaCeremonyEasing }}
 			>
 				<span>Blog</span>
@@ -122,7 +120,7 @@
 
 			<!-- Subtitle -->
 			<p
-				class="text-muted-foreground mb-12 text-xl leading-relaxed max-w-2xl mx-auto"
+				class="mx-auto mb-12 max-w-2xl text-xl leading-relaxed text-muted-foreground"
 				in:fade={{ duration: 400, delay: 200, easing: teaCeremonyEasing }}
 			>
 				{config.site.tagline}
@@ -130,7 +128,7 @@
 
 			<!-- Decorative divider -->
 			<div
-				class="divider-japanese max-w-xs mx-auto mb-12"
+				class="divider-japanese mx-auto mb-12 max-w-xs"
 				in:fade={{ duration: 350, delay: 300, easing: teaCeremonyEasing }}
 			></div>
 
@@ -143,16 +141,17 @@
 					type="search"
 					placeholder="Search articles..."
 					bind:value={searchQuery}
-					class="w-full border-input bg-background px-6 py-4 pl-14 text-base rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all"
+					class="w-full rounded-lg border-input bg-background px-6 py-4 pl-14 text-base transition-all focus:border-primary/50 focus:ring-2 focus:ring-primary/20 focus:outline-none"
 				/>
-				<div class="text-muted-foreground absolute top-1/2 left-5 -translate-y-1/2 flex items-center justify-center">
+				<div
+					class="absolute top-1/2 left-5 flex -translate-y-1/2 items-center justify-center text-muted-foreground"
+				>
 					<MagnifyingGlassIcon size={22} weight="thin" />
 				</div>
 			</div>
 		</div>
 	</div>
 </section>
-
 
 <!-- Filters Section -->
 {#if !loading && (categories.length > 0 || tags.length > 0)}
@@ -162,20 +161,23 @@
 			{#if categories.length > 0}
 				<div class="mb-6">
 					<div
-						class="flex items-center gap-2 mb-3"
+						class="mb-3 flex items-center gap-2"
 						in:fly={{ y: 12, duration: 350, delay: 0, easing: teaCeremonyEasing }}
 					>
 						<FolderIcon size={16} class="text-primary" />
-						<span class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Categories</span>
+						<span class="text-xs font-medium tracking-wider text-muted-foreground uppercase"
+							>Categories</span
+						>
 					</div>
 					<div class="flex flex-wrap gap-2">
-						{#each [{ label: 'All', value: 'all' }, ...categories.map(c => ({ label: c, value: c.toLowerCase() }))] as filter, index (filter.value)}
+						{#each [{ label: 'All', value: 'all' }, ...categories.map( (c) => ({ label: c, value: c.toLowerCase() }) )] as filter, index (filter.value)}
 							<button
-								class="px-4 py-2 text-sm font-medium transition-all duration-300 rounded-lg {selectedCategory === filter.value
+								class="rounded-lg px-4 py-2 text-sm font-medium transition-all duration-300 {selectedCategory ===
+								filter.value
 									? 'bg-primary text-primary-foreground shadow-md'
-									: 'bg-background border border-border hover:border-primary/50 hover:bg-accent'}"
+									: 'border border-border bg-background hover:border-primary/50 hover:bg-accent'}"
 								onclick={() => (selectedCategory = filter.value)}
-								in:fly={{ y: 10, duration: 350, delay: 75 + (index * 50), easing: teaCeremonyEasing }}
+								in:fly={{ y: 10, duration: 350, delay: 75 + index * 50, easing: teaCeremonyEasing }}
 							>
 								{filter.label}
 							</button>
@@ -188,22 +190,29 @@
 			{#if tags.length > 0}
 				<div>
 					<div
-						class="flex items-center gap-2 mb-3"
+						class="mb-3 flex items-center gap-2"
 						in:fly={{ y: 12, duration: 350, delay: 150, easing: teaCeremonyEasing }}
 					>
 						<TagIcon size={16} class="text-primary" />
-						<span class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Tags</span>
+						<span class="text-xs font-medium tracking-wider text-muted-foreground uppercase"
+							>Tags</span
+						>
 					</div>
 					<div class="flex flex-wrap gap-2">
 						{#each displayTags as tag, index (tag)}
 							<button
-								class="px-3 py-1.5 text-xs font-medium transition-all duration-300 rounded-md {selectedTag ===
+								class="rounded-md px-3 py-1.5 text-xs font-medium transition-all duration-300 {selectedTag ===
 								tag.toLowerCase()
 									? 'bg-primary text-primary-foreground shadow-md'
-									: 'bg-background border border-border hover:border-primary/50 hover:bg-accent'}"
+									: 'border border-border bg-background hover:border-primary/50 hover:bg-accent'}"
 								onclick={() =>
 									(selectedTag = selectedTag === tag.toLowerCase() ? '' : tag.toLowerCase())}
-								in:fly={{ y: 10, duration: 350, delay: 225 + (index * 40), easing: teaCeremonyEasing }}
+								in:fly={{
+									y: 10,
+									duration: 350,
+									delay: 225 + index * 40,
+									easing: teaCeremonyEasing
+								}}
 							>
 								{tag}
 							</button>
@@ -215,29 +224,35 @@
 			<!-- Active Filters Display -->
 			{#if selectedCategory !== 'all' || selectedTag || searchQuery}
 				<div class="mt-8 flex flex-wrap items-center gap-3 border-t border-border/60 pt-6">
-					<span class="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+					<span class="text-xs font-medium tracking-wider text-muted-foreground uppercase">
 						Active filters
 					</span>
 					{#if selectedCategory !== 'all'}
-						<span class="bg-secondary text-secondary-foreground px-3 py-1 text-xs rounded-md flex items-center gap-2">
+						<span
+							class="flex items-center gap-2 rounded-md bg-secondary px-3 py-1 text-xs text-secondary-foreground"
+						>
 							<FolderIcon size={12} />
 							{selectedCategory}
 						</span>
 					{/if}
 					{#if selectedTag}
-						<span class="bg-secondary text-secondary-foreground px-3 py-1 text-xs rounded-md flex items-center gap-2">
+						<span
+							class="flex items-center gap-2 rounded-md bg-secondary px-3 py-1 text-xs text-secondary-foreground"
+						>
 							<TagIcon size={12} />
 							{selectedTag}
 						</span>
 					{/if}
 					{#if searchQuery}
-						<span class="bg-secondary text-secondary-foreground px-3 py-1 text-xs rounded-md flex items-center gap-2">
+						<span
+							class="flex items-center gap-2 rounded-md bg-secondary px-3 py-1 text-xs text-secondary-foreground"
+						>
 							<MagnifyingGlassIcon size={12} />
 							"{searchQuery}"
 						</span>
 					{/if}
 					<button
-						class="text-muted-foreground hover:text-foreground text-xs font-medium underline underline-offset-2 transition-colors flex items-center gap-1"
+						class="flex items-center gap-1 text-xs font-medium text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
 						onclick={resetFilters}
 					>
 						<XIcon size={12} />
@@ -255,8 +270,8 @@
 	<section class="py-32">
 		<div class="container mx-auto px-4">
 			<div class="flex flex-col items-center justify-center py-16">
-				<div class="border-primary h-16 w-16 animate-spin rounded-full border-b-2"></div>
-				<p class="mt-4 text-muted-foreground text-sm">Loading articles...</p>
+				<div class="h-16 w-16 animate-spin rounded-full border-b-2 border-primary"></div>
+				<p class="mt-4 text-sm text-muted-foreground">Loading articles...</p>
 			</div>
 		</div>
 	</section>
@@ -265,13 +280,11 @@
 	<section class="py-32">
 		<div class="container mx-auto px-4">
 			<div class="mx-auto max-w-2xl py-16 text-center">
-				<div class="w-20 h-20 rounded-full bg-muted mx-auto mb-6 flex items-center justify-center">
+				<div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-muted">
 					<MagnifyingGlassIcon size={40} class="text-muted-foreground" />
 				</div>
-				<h1 class="mb-4 text-3xl font-semibold">
-					No posts found
-				</h1>
-				<p class="text-muted-foreground mb-8 text-lg leading-relaxed">
+				<h1 class="mb-4 text-3xl font-semibold">No posts found</h1>
+				<p class="mb-8 text-lg leading-relaxed text-muted-foreground">
 					{#if posts.length === 0}
 						No blog posts yet. Check back soon!
 					{:else}
@@ -281,7 +294,7 @@
 				{#if posts.length > 0}
 					<button
 						onclick={resetFilters}
-						class="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 font-medium rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
+						class="rounded-lg bg-primary px-8 py-3 font-medium text-primary-foreground shadow-md transition-all duration-300 hover:bg-primary/90 hover:shadow-lg"
 					>
 						Clear filters
 					</button>
@@ -295,16 +308,16 @@
 		<section class="border-b border-border/40 bg-muted/20 py-16">
 			<div class="container mx-auto px-4">
 				<div class="mb-10" in:fly={{ y: 15, duration: 375, delay: 0, easing: teaCeremonyEasing }}>
-					<div class="flex items-center gap-3 mb-2">
-						<div class="w-8 h-0.5 bg-primary"></div>
-						<span class="text-sm font-medium tracking-widest uppercase text-muted-foreground">Featured</span>
+					<div class="mb-2 flex items-center gap-3">
+						<div class="h-0.5 w-8 bg-primary"></div>
+						<span class="text-sm font-medium tracking-widest text-muted-foreground uppercase"
+							>Featured</span
+						>
 					</div>
-					<h2 class="text-3xl font-semibold">
-						Editor's Picks
-					</h2>
+					<h2 class="text-3xl font-semibold">Editor's Picks</h2>
 				</div>
 
-				<div class="grid-japanese max-w-7xl mx-auto">
+				<div class="grid-japanese mx-auto max-w-7xl">
 					{#each featuredPosts as post, index (post.slug)}
 						<BlogCard {post} {index} delay={100} stagger={60} variant="featured" />
 					{/each}
@@ -319,18 +332,22 @@
 			<div class="mb-10" in:fly={{ y: 15, duration: 375, delay: 0, easing: teaCeremonyEasing }}>
 				<div class="flex items-center justify-between">
 					<div>
-						<div class="flex items-center gap-3 mb-2">
-							<div class="w-8 h-0.5 bg-primary"></div>
-							<span class="text-sm font-medium tracking-widest uppercase text-muted-foreground">Archive</span>
+						<div class="mb-2 flex items-center gap-3">
+							<div class="h-0.5 w-8 bg-primary"></div>
+							<span class="text-sm font-medium tracking-widest text-muted-foreground uppercase"
+								>Archive</span
+							>
 						</div>
 						<h2 class="text-3xl font-semibold">
-							{filteredPosts.length === posts.length ? 'All Articles' : `${filteredPosts.length} Found`}
+							{filteredPosts.length === posts.length
+								? 'All Articles'
+								: `${filteredPosts.length} Found`}
 						</h2>
 					</div>
 				</div>
 			</div>
 
-			<div class="grid-japanese max-w-7xl mx-auto">
+			<div class="grid-japanese mx-auto max-w-7xl">
 				{#each filteredPosts as post, index (post.slug)}
 					<BlogCard {post} {index} delay={80} stagger={50} variant="default" />
 				{/each}

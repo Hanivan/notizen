@@ -66,34 +66,35 @@ This project uses **Svelte 5 runes mode** globally (except node_modules).
 
 ```svelte
 <script>
-  // $state - Reactive state
-  let count = $state(0);
-  let user = $state({ name: 'John', age: 30 });
+	// $state - Reactive state
+	let count = $state(0);
+	let user = $state({ name: 'John', age: 30 });
 
-  // $derived - Computed values (use instead of $effect for calculations)
-  let doubled = $derived(count * 2);
-  let isAdult = $derived(user.age >= 18);
+	// $derived - Computed values (use instead of $effect for calculations)
+	let doubled = $derived(count * 2);
+	let isAdult = $derived(user.age >= 18);
 
-  // $props - Component props (replaces export let)
-  interface Props {
-    name: string;
-    age?: number;
-  }
-  let { name, age = 18 }: Props = $props();
+	// $props - Component props (replaces export let)
+	interface Props {
+		name: string;
+		age?: number;
+	}
+	let { name, age = 18 }: Props = $props();
 
-  // ✅ Use event handlers instead of $effect for simple operations
-  function increment() {
-    count++;
-    console.log('Count:', count); // Direct logging, not $effect
-  }
+	// ✅ Use event handlers instead of $effect for simple operations
+	function increment() {
+		count++;
+		console.log('Count:', count); // Direct logging, not $effect
+	}
 </script>
 
 <button onclick={increment}>
-  {name}: {count} × 2 = {doubled}
+	{name}: {count} × 2 = {doubled}
 </button>
 ```
 
 **⚠️ Important: Minimize `$effect` usage**
+
 - Use `$derived` for computations
 - Use event handlers for actions
 - Use `runed` library utilities (sleep, tick, etc.) for common patterns
@@ -105,7 +106,7 @@ Headless, accessible component library with 40+ components.
 
 ```svelte
 <script>
-  import { Button, Dialog, DropdownMenu, Select, Tabs } from 'bits-ui';
+	import { Button, Dialog, DropdownMenu, Select, Tabs } from 'bits-ui';
 </script>
 
 <!-- Basic usage -->
@@ -113,13 +114,13 @@ Headless, accessible component library with 40+ components.
 
 <!-- Dialog with builder pattern -->
 <Dialog.Root>
-  <Dialog.Trigger asChild let:builder>
-    <Button build={builder}>Open Dialog</Button>
-  </Dialog.Trigger>
-  <Dialog.Content>
-    <Dialog.Title>Dialog Title</Dialog.Title>
-    <Dialog.Description>Description here</Dialog.Description>
-  </Dialog.Content>
+	<Dialog.Trigger asChild let:builder>
+		<Button build={builder}>Open Dialog</Button>
+	</Dialog.Trigger>
+	<Dialog.Content>
+		<Dialog.Title>Dialog Title</Dialog.Title>
+		<Dialog.Description>Description here</Dialog.Description>
+	</Dialog.Content>
 </Dialog.Root>
 ```
 
@@ -131,21 +132,21 @@ Type-safe internationalization with compile-time optimizations.
 
 ```svelte
 <script>
-  import { setLocale } from '$lib/paraglide/runtime';
-  import { m } from '$lib/paraglide/messages.js';
+	import { setLocale } from '$lib/paraglide/runtime';
+	import { m } from '$lib/paraglide/messages.js';
 
-  let currentLocale = $state('en');
+	let currentLocale = $state('en');
 
-  function changeLocale(locale: string) {
-    setLocale(locale);
-    currentLocale = locale;
-  }
+	function changeLocale(locale: string) {
+		setLocale(locale);
+		currentLocale = locale;
+	}
 </script>
 
 <select bind:value={currentLocale} onchange={changeLocale(currentLocale)}>
-  <option value="en">English</option>
-  <option value="id">Indonesian</option>
-  <option value="jp">Japanese</option>
+	<option value="en">English</option>
+	<option value="id">Indonesian</option>
+	<option value="jp">Japanese</option>
 </select>
 
 <h1>{m.hello_world({ name: 'Claude' })}</h1>
@@ -164,20 +165,20 @@ Latest TailwindCSS with Vite plugin. Configure in CSS, no config file needed!
 @plugin '@tailwindcss/typography';
 
 :root {
-  --primary: oklch(0.52 0.24 25);
-  --secondary: oklch(0.94 0.008 90);
+	--primary: oklch(0.52 0.24 25);
+	--secondary: oklch(0.94 0.008 90);
 }
 
 @theme inline {
-  --color-primary: var(--primary);
-  --color-secondary: var(--secondary);
+	--color-primary: var(--primary);
+	--color-secondary: var(--secondary);
 }
 ```
 
 ```svelte
 <!-- Use colors directly -->
 <div class="bg-primary text-primary-foreground">
-  <button class="bg-secondary hover:bg-secondary/80">Click me</button>
+	<button class="bg-secondary hover:bg-secondary/80">Click me</button>
 </div>
 ```
 
@@ -203,8 +204,8 @@ Enhanced image optimization.
 
 ```svelte
 <script>
-  import { enhance } from '@sveltejs/enhanced-img';
-  import img from '$lib/assets/photo.jpg?enhanced';
+	import { enhance } from '@sveltejs/enhanced-img';
+	import img from '$lib/assets/photo.jpg?enhanced';
 </script>
 
 <img src={img.src} width={img.width} height={img.height} alt="Optimized" />
@@ -222,11 +223,11 @@ The old icon names (without `Icon` suffix) are deprecated. Always use the newer 
 
 ```svelte
 <script>
-  // ❌ BAD: Old imports (deprecated)
-  import { House, User, Settings, MagnifyingGlass } from 'phosphor-svelte';
+	// ❌ BAD: Old imports (deprecated)
+	import { House, User, Settings, MagnifyingGlass } from 'phosphor-svelte';
 
-  // ✅ GOOD: New imports with Icon suffix
-  import { HouseIcon, UserIcon, SettingsIcon, MagnifyingGlassIcon } from 'phosphor-svelte';
+	// ✅ GOOD: New imports with Icon suffix
+	import { HouseIcon, UserIcon, SettingsIcon, MagnifyingGlassIcon } from 'phosphor-svelte';
 </script>
 
 <HouseIcon size={32} weight="fill" />
@@ -235,6 +236,7 @@ The old icon names (without `Icon` suffix) are deprecated. Always use the newer 
 ```
 
 **Why This Matters:**
+
 - Old names trigger deprecation warnings
 - New names are the future-proof standard
 - Same API, just with `Icon` suffix
@@ -249,65 +251,55 @@ Utility functions for Svelte 5 runes that provide cleaner alternatives to common
 
 ```svelte
 <script>
-  import { sleep, tick, untrack, mount } from 'runed';
+	import { sleep, tick, untrack, mount } from 'runed';
 
-  // ❌ BAD: Using $effect for simple logging
-  $effect(() => {
-    console.log('Count changed:', count);
-  });
+	// ❌ BAD: Using $effect for simple logging
+	$effect(() => {
+		console.log('Count changed:', count);
+	});
 
-  // ✅ GOOD: Just log directly in event handlers
-  function increment() {
-    count++;
-    console.log('Count changed:', count);
-  }
+	// ✅ GOOD: Just log directly in event handlers
+	function increment() {
+		count++;
+		console.log('Count changed:', count);
+	}
 
-  // ✅ Use sleep() instead of $effect for delays
-  let loading = $state(false);
+	// ✅ Use sleep() instead of $effect for delays
+	let loading = $state(false);
 
-  async function fetchData() {
-    loading = true;
-    await sleep(1000); // Sleep 1 second
-    loading = false;
-  }
+	async function fetchData() {
+		loading = true;
+		await sleep(1000); // Sleep 1 second
+		loading = false;
+	}
 
-  // ✅ Use tick() for DOM updates
-  let items = $state([]);
+	// ✅ Use tick() for DOM updates
+	let items = $state([]);
 
-  async function addItems() {
-    items = [1, 2, 3];
-    await tick(); // Wait for DOM to update
-    const element = document.querySelector('.item');
-  }
+	async function addItems() {
+		items = [1, 2, 3];
+		await tick(); // Wait for DOM to update
+		const element = document.querySelector('.item');
+	}
 
-  // ❌ BAD: Using onMount for initialization
-  import { onMount } from 'svelte';
+	// ❌ BAD: Using onMount for initialization
+	import { onMount } from 'svelte';
 
-  onMount(() => {
-    loadData();
-  });
+	onMount(() => {
+		loadData();
+	});
 
-  // ✅ GOOD: Use top-level await or mount() from runed
-  // For components that need initialization
+	// ✅ GOOD: Use top-level await or mount() from runed
+	// For components that need initialization
 </script>
 
-**Available `runed` functions:**
-- `sleep(ms)` - Delay execution
-- `tick()` - Wait for DOM updates
-- `untrack(fn)` - Run function without reactivity tracking
-- `mount(fn)` - Component lifecycle management
-- `use*()` - Various utility hooks
-
-**When to use $effect (sparingly):**
-- Synchronizing state with external systems (localStorage, URL params)
-- Side effects that MUST react to state changes
-- Debugging/reactivity tracing
-
-**When NOT to use $effect:**
-- Simple logging (use event handlers)
-- DOM manipulation after state changes (use `tick()`)
-- Data fetching on mount (use async functions or `$state()` with promises)
-- Computations (use `$derived` instead)
+**Available `runed` functions:** - `sleep(ms)` - Delay execution - `tick()` - Wait for DOM updates -
+`untrack(fn)` - Run function without reactivity tracking - `mount(fn)` - Component lifecycle
+management - `use*()` - Various utility hooks **When to use $effect (sparingly):** - Synchronizing
+state with external systems (localStorage, URL params) - Side effects that MUST react to state
+changes - Debugging/reactivity tracing **When NOT to use $effect:** - Simple logging (use event
+handlers) - DOM manipulation after state changes (use `tick()`) - Data fetching on mount (use async
+functions or `$state()` with promises) - Computations (use `$derived` instead)
 ```
 
 ### **svelte-meta-tags (SEO)**
@@ -316,18 +308,18 @@ Manage meta tags for SvelteKit apps.
 
 ```svelte
 <script>
-  import { MetaTags } from 'svelte-meta-tags';
+	import { MetaTags } from 'svelte-meta-tags';
 </script>
 
 <svelte:head>
-  <MetaTags
-    title="Blog Post"
-    description="Post description"
-    openGraph={{
-      title: "Blog Post",
-      image: "https://example.com/og-image.jpg"
-    }}
-  />
+	<MetaTags
+		title="Blog Post"
+		description="Post description"
+		openGraph={{
+			title: 'Blog Post',
+			image: 'https://example.com/og-image.jpg'
+		}}
+	/>
 </svelte:head>
 ```
 
@@ -361,9 +353,9 @@ import { describe, it, expect } from 'vitest';
 import { add } from './math';
 
 describe('Math utils', () => {
-  it('should add numbers', () => {
-    expect(add(2, 3)).toBe(5);
-  });
+	it('should add numbers', () => {
+		expect(add(2, 3)).toBe(5);
+	});
 });
 ```
 
@@ -395,11 +387,13 @@ describe('Math utils', () => {
 ## 🎨 Code Quality
 
 ### **Prettier** (`.prettierrc`)
+
 - Tabs, single quotes, no trailing commas
 - 100 char print width
 - Svelte + TailwindCSS plugins
 
 ### **ESLint** (`eslint.config.js`)
+
 - Flat config with Svelte rules
 - Prettier integration (no conflicts)
 
@@ -436,6 +430,7 @@ static/                 # Static files
 ```
 
 **⭐ Key: BaseLayout Pattern**
+
 - `+layout.svelte` - Contains header, navbar, footer (applies to all pages)
 - `+page.svelte` - Contains only page-specific content
 - Individual routes - Only their content, layout is automatic
@@ -445,102 +440,108 @@ static/                 # Static files
 ### **⚠️ CRITICAL RULES**
 
 **1. Avoid Overusing `$effect`**
+
 ```svelte
 <script>
-  // ❌ BAD: Using $effect for simple operations
-  $effect(() => {
-    console.log('Count:', count);
-  });
+	// ❌ BAD: Using $effect for simple operations
+	$effect(() => {
+		console.log('Count:', count);
+	});
 
-  // ✅ GOOD: Log in event handlers
-  function increment() {
-    count++;
-    console.log('Count:', count);
-  }
+	// ✅ GOOD: Log in event handlers
+	function increment() {
+		count++;
+		console.log('Count:', count);
+	}
 
-  // ❌ BAD: Using $effect for derived values
-  $effect(() => {
-    doubled = count * 2;
-  });
+	// ❌ BAD: Using $effect for derived values
+	$effect(() => {
+		doubled = count * 2;
+	});
 
-  // ✅ GOOD: Use $derived for computations
-  let doubled = $derived(count * 2);
+	// ✅ GOOD: Use $derived for computations
+	let doubled = $derived(count * 2);
 </script>
 ```
 
 **2. Avoid `onMount` for Data Fetching**
+
 ```svelte
 <script>
-  // ❌ BAD: Using onMount for initialization
-  import { onMount } from 'svelte';
+	// ❌ BAD: Using onMount for initialization
+	import { onMount } from 'svelte';
 
-  onMount(async () => {
-    const data = await fetchData();
-    items = data;
-  });
+	onMount(async () => {
+		const data = await fetchData();
+		items = data;
+	});
 
-  // ✅ GOOD: Use top-level async or reactive promises
-  async function load() {
-    const data = await fetchData();
-    items = data;
-  }
+	// ✅ GOOD: Use top-level async or reactive promises
+	async function load() {
+		const data = await fetchData();
+		items = data;
+	}
 
-  load(); // Call directly
+	load(); // Call directly
 
-  // ✅ GOOD: For reactive data loading
-  let data = $state(null);
-  let loading = $state(true);
+	// ✅ GOOD: For reactive data loading
+	let data = $state(null);
+	let loading = $state(true);
 
-  fetchData().then(result => {
-    data = result;
-    loading = false;
-  });
+	fetchData().then((result) => {
+		data = result;
+		loading = false;
+	});
 </script>
 ```
 
 **3. Use `runed` Library Functions**
+
 ```svelte
 <script>
-  import { sleep, tick } from 'runed';
+	import { sleep, tick } from 'runed';
 
-  // ✅ Use sleep() for delays
-  async function withDelay() {
-    loading = true;
-    await sleep(500);
-    loading = false;
-  }
+	// ✅ Use sleep() for delays
+	async function withDelay() {
+		loading = true;
+		await sleep(500);
+		loading = false;
+	}
 
-  // ✅ Use tick() for DOM updates
-  async function updateAndScroll() {
-    items.push(newItem);
-    await tick(); // Wait for DOM update
-    window.scrollTo(0, document.body.scrollHeight);
-  }
+	// ✅ Use tick() for DOM updates
+	async function updateAndScroll() {
+		items.push(newItem);
+		await tick(); // Wait for DOM update
+		window.scrollTo(0, document.body.scrollHeight);
+	}
 </script>
 ```
 
 **4. Always Use BaseLayout Pattern (DRY)**
+
 ```svelte
 <!-- ❌ BAD: Repeating header/navbar/footer in every page -->
 <!-- src/routes/about/+page.svelte -->
 <div class="header">
-  <nav>...</nav>
+	<nav>...</nav>
 </div>
 <main>
-  <h1>About</h1>
-  <p>About content...</p>
+	<h1>About</h1>
+	<p>About content...</p>
 </main>
 <footer>...</footer>
 
 <!-- src/routes/contact/+page.svelte -->
 <div class="header">
-  <nav>...</nav> <!-- REPEATED -->
+	<nav>...</nav>
+	<!-- REPEATED -->
 </div>
 <main>
-  <h1>Contact</h1>
-  <p>Contact content...</p>
+	<h1>Contact</h1>
+	<p>Contact content...</p>
 </main>
-<footer>...</footer> <!-- REPEATED -->
+<footer>...</footer>
+<!-- REPEATED -->
 ```
 
 ```svelte
@@ -589,6 +590,7 @@ static/                 # Static files
 ```
 
 **BaseLayout Pattern Benefits:**
+
 - ✅ **DRY** - Header/navbar/footer defined once
 - ✅ **Consistent** - Same layout across all pages
 - ✅ **Maintainable** - Update navbar/footer in one place
@@ -596,6 +598,7 @@ static/                 # Static files
 - ✅ **Flexible** - Can use slot props for page-specific customization
 
 **5. Avoid `sed -i` Force Replace**
+
 ```bash
 # ❌ BAD: Using sed -i for file edits (dangerous, error-prone)
 sed -i 's/old/new/g' file.txt
@@ -610,23 +613,26 @@ Edit tool with:
 ```
 
 **Why Avoid `sed -i`:**
+
 - ❌ **Fragile** - Breaks on special characters, quotes, tabs
 - ❌ **Dangerous** - No verification, can corrupt files
 - ❌ **Error-prone** - Fails silently on partial matches
 - ❌ **Hard to debug** - Can't see what changed
 
 **When to Use Edit Tool:**
+
 ```typescript
 // ✅ Use Edit for all file modifications
 Edit({
-  file_path: "/path/to/file.svelte",
-  old_string: "exact string to replace",
-  new_string: "replacement string",
-  replace_all: false  // or true for multiple occurrences
-})
+	file_path: '/path/to/file.svelte',
+	old_string: 'exact string to replace',
+	new_string: 'replacement string',
+	replace_all: false // or true for multiple occurrences
+});
 ```
 
 **Only Use `sed` For:**
+
 - ✅ Simple text operations in non-code files
 - ✅ One-off commands that don't affect project files
 - ✅ Operations where Edit tool isn't available
@@ -737,6 +743,7 @@ Svelte 5 includes powerful built-in animation and transition modules. Use these 
   - Each has `In`, `Out`, `InOut` variants (e.g., `quintOut`)
 
 **Why Use Built-in Modules:**
+
 - ✅ **No extra dependencies** - Smaller bundle size
 - ✅ **Svelte-optimized** - Designed for Svelte's reactivity
 - ✅ **Type-safe** - Full TypeScript support
@@ -744,56 +751,64 @@ Svelte 5 includes powerful built-in animation and transition modules. Use these 
 - ✅ **Flexible** - Combine with CSS transitions for custom effects
 
 **When to Use External Libraries:**
+
 - Complex 3D animations (three.js)
 - SVG animations (gsap)
 - Canvas/WebGL animations
 - Specific animation formats (Lottie, Rive)
 
 **Advanced Example: Combining Modules**
+
 ```svelte
 <script>
-  import { fly, scale } from 'svelte/transition';
-  import { flip } from 'svelte/animate';
-  import { spring } from 'svelte/motion';
+	import { fly, scale } from 'svelte/transition';
+	import { flip } from 'svelte/animate';
+	import { spring } from 'svelte/motion';
 
-  let cards = $state([
-    { id: 1, title: 'Card 1', color: 'red' },
-    { id: 2, title: 'Card 2', color: 'blue' },
-    { id: 3, title: 'Card 3', color: 'green' }
-  ]);
+	let cards = $state([
+		{ id: 1, title: 'Card 1', color: 'red' },
+		{ id: 2, title: 'Card 2', color: 'blue' },
+		{ id: 3, title: 'Card 3', color: 'green' }
+	]);
 
-  let offset = $state(spring({ x: 0, y: 0 }, {
-    stiffness: 0.15,
-    damping: 0.1
-  }));
+	let offset = $state(
+		spring(
+			{ x: 0, y: 0 },
+			{
+				stiffness: 0.15,
+				damping: 0.1
+			}
+		)
+	);
 
-  function moveUp(index) {
-    if (index > 0) {
-      const temp = cards[index];
-      cards[index] = cards[index - 1];
-      cards[index - 1] = temp;
-    }
-  }
+	function moveUp(index) {
+		if (index > 0) {
+			const temp = cards[index];
+			cards[index] = cards[index - 1];
+			cards[index - 1] = temp;
+		}
+	}
 </script>
 
 <div style="transform: translate({$offset.x}px, {$offset.y}px)">
-  {#each cards as card (card.id)}
-    <div
-      class="card"
-      animate:flip={{ duration: 400 }}
-      transition:fly|scale={{ duration: 300 }}
-      style="background: {card.color}"
-      role="button"
-      tabindex="0"
-      onclick={() => moveUp(cards.indexOf(card))}
-    >
-      {card.title}
-    </div>
-  {/each}
+	{#each cards as card (card.id)}
+		<div
+			class="card"
+			animate:flip={{ duration: 400 }}
+			transition:fly|scale={{ duration: 300 }}
+			style="background: {card.color}"
+			role="button"
+			tabindex="0"
+			onclick={() => moveUp(cards.indexOf(card))}
+		>
+			{card.title}
+		</div>
+	{/each}
 </div>
 ```
 
 **Advanced BaseLayout with Slots:**
+
 ```svelte
 <!-- src/routes/+layout.svelte -->
 <script lang="ts">
@@ -851,16 +866,18 @@ import { HouseIcon, NewspaperIcon, ListIcon, XIcon } from 'phosphor-svelte';
 ```
 
 **Why This Matters:**
+
 - Old names trigger deprecation warnings
 - New names are the future-proof standard
 - Same API, just with `Icon` suffix
 - Prevents breaking changes in future versions
 
 **Complete Example:**
+
 ```svelte
 <script lang="ts">
-  import { HouseIcon, NewspaperIcon, ListIcon, XIcon, SunIcon, MoonIcon } from 'phosphor-svelte';
-  import { setMode } from 'mode-watcher';
+	import { HouseIcon, NewspaperIcon, ListIcon, XIcon, SunIcon, MoonIcon } from 'phosphor-svelte';
+	import { setMode } from 'mode-watcher';
 </script>
 
 <!-- Usage is identical -->
@@ -870,14 +887,15 @@ import { HouseIcon, NewspaperIcon, ListIcon, XIcon } from 'phosphor-svelte';
 
 <!-- Theme toggle example -->
 <button onclick={() => setMode('light')}>
-  <SunIcon size={20} weight="fill" />
+	<SunIcon size={20} weight="fill" />
 </button>
 <button onclick={() => setMode('dark')}>
-  <MoonIcon size={20} weight="fill" />
+	<MoonIcon size={20} weight="fill" />
 </button>
 ```
 
 **Migration Guide:**
+
 - `House` → `HouseIcon`
 - `Newspaper` → `NewspaperIcon`
 - `List` → `ListIcon`
@@ -894,46 +912,49 @@ import { HouseIcon, NewspaperIcon, ListIcon, XIcon } from 'phosphor-svelte';
 All icons follow the same pattern: `{IconName}Icon`
 
 ### **Component Structure**
+
 ```svelte
 <script lang="ts">
-  // 1. Imports (avoid importing onMount unless necessary)
-  import { Button } from 'bits-ui';
-  import { sleep, tick } from 'runed';
+	// 1. Imports (avoid importing onMount unless necessary)
+	import { Button } from 'bits-ui';
+	import { sleep, tick } from 'runed';
 
-  // 2. Types/Interfaces
-  interface Props {
-    title: string;
-    variant?: 'default' | 'primary';
-  }
+	// 2. Types/Interfaces
+	interface Props {
+		title: string;
+		variant?: 'default' | 'primary';
+	}
 
-  // 3. Props
-  let { title, variant = 'default' }: Props = $props();
+	// 3. Props
+	let { title, variant = 'default' }: Props = $props();
 
-  // 4. State
-  let count = $state(0);
-  let doubled = $derived(count * 2);
+	// 4. State
+	let count = $state(0);
+	let doubled = $derived(count * 2);
 
-  // 5. Functions (avoid $effect for simple operations)
-  function increment() {
-    count++;
-    // Direct logic, not $effect
-  }
+	// 5. Functions (avoid $effect for simple operations)
+	function increment() {
+		count++;
+		// Direct logic, not $effect
+	}
 </script>
 
 <div class="container">
-  <h1>{title}</h1>
-  <p>Count: {count}</p>
-  <Button onclick={increment}>Increment</Button>
+	<h1>{title}</h1>
+	<p>Count: {count}</p>
+	<Button onclick={increment}>Increment</Button>
 </div>
 ```
 
 ### **File Naming**
+
 - Components: `PascalCase.svelte`
 - Utilities: `camelCase.ts`
 - Types: `types.ts`
 - Tests: `*.spec.ts` or `*.test.ts`
 
 ### **Import Order**
+
 ```typescript
 // 1. External dependencies
 import { Button } from 'bits-ui';
@@ -950,11 +971,13 @@ import type { BlogPost } from '$lib/types';
 ## 🎨 Color System (Japanese Minimalism)
 
 **Light Mode:**
+
 - Background: `oklch(0.97 0.005 90)` - Warm off-white
 - Foreground: `oklch(0.18 0.01 90)` - Soft black
 - Primary: `oklch(0.52 0.24 25)` - Rich vermilion red
 
 **Dark Mode (`.dark` class):**
+
 - Background: `oklch(0.12 0.008 90)` - Deep charcoal
 - Foreground: `oklch(0.94 0.005 90)` - Off-white
 - Primary: `oklch(0.62 0.22 25)` - Bright vermilion
@@ -964,10 +987,11 @@ import type { BlogPost } from '$lib/types';
 ### **Add a New Route (With BaseLayout Pattern)**
 
 1. **Create page component** - Only page-specific content
+
 ```svelte
 <!-- src/routes/about/+page.svelte -->
 <svelte:head>
-  <title>About - Notizen</title>
+	<title>About - Notizen</title>
 </svelte:head>
 
 <h1>About</h1>
@@ -975,16 +999,20 @@ import type { BlogPost } from '$lib/types';
 ```
 
 2. **BaseLayout automatically includes** - Header, navbar, footer
+
 - No need to repeat layout elements
 - Pages are clean and focused on content
 
 ### **Add API Endpoint**
+
 Create `src/routes/api/users/+server.ts`
 
 ### **Add a Component**
+
 Create `src/lib/components/MyComponent.svelte`
 
 ### **Add Translation**
+
 1. Add to `messages/en.json`
 2. Add to `messages/id.json` and `messages/jp.json`
 3. Use with `m.your_key`
@@ -994,18 +1022,18 @@ Create `src/lib/components/MyComponent.svelte`
 ```svelte
 <!-- src/lib/components/Navbar.svelte -->
 <script lang="ts">
-  import { page } from '$app/stores';
+	import { page } from '$app/stores';
 </script>
 
 <nav class="border-b">
-  <a href="/">Home</a>
-  <a href="/blog">Blog</a>
-  <a href="/about">About</a>
+	<a href="/">Home</a>
+	<a href="/blog">Blog</a>
+	<a href="/about">About</a>
 </nav>
 
 <!-- src/lib/components/Footer.svelte -->
 <footer class="border-t py-8">
-  <p>&copy; 2025 Notizen. All rights reserved.</p>
+	<p>&copy; 2025 Notizen. All rights reserved.</p>
 </footer>
 ```
 
@@ -1023,6 +1051,7 @@ Create `src/lib/components/MyComponent.svelte`
 ### **File Editing Rules**
 
 **1. Always Use Edit Tool for Code Files**
+
 ```typescript
 // ✅ GOOD: Use Edit tool for .svelte, .ts, .js, .json files
 Edit({
@@ -1036,18 +1065,21 @@ sed -i 's/old/new/g' file.svelte  // DANGEROUS!
 ```
 
 **2. When to Use Edit Tool**
+
 - ✅ All source code files (.svelte, .ts, .js, .tsx, .jsx)
 - ✅ Configuration files (.json, .yaml, .toml)
 - ✅ Markdown files (.md, .svx)
 - ✅ Any file where precision matters
 
 **3. When Bash/sed is Acceptable**
+
 - ✅ Simple operations in logs or temporary files
 - ✅ File system operations (mkdir, cp, mv, rm)
 - ✅ Package management (pnpm install, npm scripts)
 - ✅ One-off commands that don't modify code
 
 **4. Safe File Modification Workflow**
+
 ```bash
 # ✅ SAFE: Read first, then Edit
 1. Read tool - See current file content
